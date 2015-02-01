@@ -1,0 +1,11 @@
+{
+	"name": "samcodes-admob",
+	"url": "http://samcodes.co.uk/code/",
+	"license": "MIT",
+	"tags": ["admob","ads","interstitials","android","ios"],
+	"description": "Google AdMob ads for Android and iOS",
+	"version": "1.0.0",
+	"releasenote": "Initial release",
+	"contributors": ["samcodes"],
+	"dependencies": {}
+}

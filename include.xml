@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<project>
+	<ndll name="samcodesadmob" if="ios" />
+
+	<section if="ios">
+		<dependency name="project/include/libGoogleAdMobAds.a" />
+		<dependency name="QuartzCore.framework"/>
+		<dependency name="SystemConfiguration.framework" />
+		<dependency name="AdSupport.framework" />
+	</section>
+	
+	<section if="android">
+		<dependency name="samcodes-admob" path="dependencies/samcodes-admob"/>
+		<android extension="com.samcodes.admob.AdMobExtension" />
+	</section>
+</project>
