@@ -7,5 +7,5 @@
 	"version": "1.0.0",
 	"releasenote": "Initial release",
 	"contributors": ["samcodes"],
-	"dependencies": {}
+	"dependencies": {"openfl-gps-lib": ""}
 }

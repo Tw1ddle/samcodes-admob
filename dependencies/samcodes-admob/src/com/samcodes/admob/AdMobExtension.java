@@ -13,6 +13,7 @@ import android.widget.Button;
 import android.widget.ImageView;
 import org.haxe.extension.Extension;
 import org.haxe.lime.HaxeObject;
+import java.util.HashMap; 
 
 import com.google.android.gms.ads.*;
 
@@ -22,8 +23,8 @@ public class AdMobExtension extends Extension
 	private static String testDeviceId = "::ENV_AdmobTestDeviceId::";
 	
 	// Assumes 1:1 mapping from ad unit ids to ads
-	private HashMap<String, AdView> unitIdToBannerView = new Hashmap<String, AdView>();
-	private HashMap<String, InterstitialAd> unitIdToInterstitial = new Hashmap<String, InterstitialAd>();
+	private HashMap<String, AdView> unitIdToBannerView = new HashMap<String, AdView>();
+	private HashMap<String, InterstitialAd> unitIdToInterstitial = new HashMap<String, InterstitialAd>();
 	
 	public static HaxeObject callback = null;
 	public static void setListener(HaxeObject haxeCallback) {
@@ -211,23 +212,33 @@ public class AdMobExtension extends Extension
 	}
 	
 	public void showBanner(String id) {
-		AdView view = getBannerViewForUnitId(id);
+		final AdView view = getBannerViewForUnitId(id);
 		
 		if(view != null) {
-			view.show();
+			mainActivity.runOnUiThread(new Runnable() {
+				public void run() {
+					// TODO add banner view to view hierarchy?
+					view.setVisibility(View.VISIBLE);
+				}
+			});
 		}
 	}
 	
 	public void hideBanner(String id) {
-		AdView view = getBannerViewForUnitId(id);
+		final AdView view = getBannerViewForUnitId(id);
 		
 		if(view != null) {
-			view.hide();
+			mainActivity.runOnUiThread(new Runnable() {
+				public void run() {
+					// TODO remove banner view from view hierarchy?
+					view.setVisibility(View.INVISIBLE);
+				}
+			});
 		}
 	}
 	
 	public boolean hasCachedInterstitial(String id) {
-		InterstitialAd ad = getInterstitialForUnitId();
+		InterstitialAd ad = getInterstitialForUnitId(id);
 		
 		if(ad == null) {
 			return false;
@@ -237,17 +248,17 @@ public class AdMobExtension extends Extension
 	}
 	
 	public void cacheInterstitial(String id) {
-		InterstitialAd ad = getInterstitialForUnitId();
+		InterstitialAd ad = getInterstitialForUnitId(id);
 		
 		if(ad != null) {
 			AdRequest request = null;
 			
 			if(testDeviceId != "null") {
-				AdRequest request = new AdRequest.Builder()
+				request = new AdRequest.Builder()
 				.addTestDevice(testDeviceId)
 				.build();
 			} else {
-				AdRequest request = new AdRequest.Builder()
+				request = new AdRequest.Builder()
 				.build();
 			}
 
@@ -256,7 +267,7 @@ public class AdMobExtension extends Extension
 	}
 	
 	public void showInterstitial(String id) {
-		InterstitialAd ad = getInterstitialForUnitId();
+		InterstitialAd ad = getInterstitialForUnitId(id);
 		
 		if(ad != null) {
 			ad.show();
@@ -270,7 +281,7 @@ public class AdMobExtension extends Extension
 		
 		InterstitialAd ad = new InterstitialAd(mainActivity);
 		ad.setAdUnitId(id);
-		ad.setAdListener(new MyAdListener(id));
+		ad.setAdListener(new MyInterstitialListener(id));
 		
 		return ad;
 	}
@@ -282,8 +293,8 @@ public class AdMobExtension extends Extension
 		
 		AdView ad = new AdView(mainActivity);
 		ad.setAdUnitId(id);
-		ad.setAdSize(size);
-		ad.setAdListener(new MyAdListener(id));
+		//ad.setAdSize(size); // TODO need to set view parameters
+		ad.setAdListener(new MyBannerListener(id));
 		
 		unitIdToBannerView.put(id, ad);
 		
@@ -302,7 +313,7 @@ public class AdMobExtension extends Extension
 	}
 	
 	private InterstitialAd getInterstitialForUnitId(String id) {
-		AdView ad = unitIdToInterstitial.get(id);
+		InterstitialAd ad = unitIdToInterstitial.get(id);
 		
 		if(ad == null) {
 			Log.i(TAG, "Could not get interstitial with id " + id + " adding a new one...");
@@ -310,5 +321,26 @@ public class AdMobExtension extends Extension
 		}
 		
 		return ad;
+	}
+	
+	/** Gets a string error reason from an error code. */
+	private String getErrorReason(int errorCode) {
+		String errorReason = "";
+		switch(errorCode) {
+			case AdRequest.ERROR_CODE_INTERNAL_ERROR:
+				errorReason = "Internal error";
+				break;
+			case AdRequest.ERROR_CODE_INVALID_REQUEST:
+				errorReason = "Invalid request";
+				break;
+			case AdRequest.ERROR_CODE_NETWORK_ERROR:
+				errorReason = "Network Error";
+				break;
+			case AdRequest.ERROR_CODE_NO_FILL:
+				errorReason = "No fill";
+				break;
+			}
+			
+		return errorReason;
 	}
 }

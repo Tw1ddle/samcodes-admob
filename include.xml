@@ -10,6 +10,7 @@
 	</section>
 	
 	<section if="android">
+		<haxelib name="openfl-gps-lib" /> 
 		<dependency name="samcodes-admob" path="dependencies/samcodes-admob"/>
 		<android extension="com.samcodes.admob.AdMobExtension" />
 	</section>
