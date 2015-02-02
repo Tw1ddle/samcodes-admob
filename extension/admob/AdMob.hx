@@ -1,4 +1,4 @@
-package extension.chartboost;
+package extension.admob;
 
 #if android
 import openfl.utils.JNI;
@@ -9,24 +9,14 @@ import flash.Lib;
 #end
 
 #if (android || ios)
-@:allow(extension.Chartboost) class Chartboost
+@:allow(extension.Chartboost) class AdMob
 {
 	// Must be called before use of any other methods in this class
-	public static function init(?appId:String, ?appSignature:String):Void {
-		#if ios
-		if (appId == null || appSignature == null || appId.length <= 10 || appSignature.length <= 10) {
-			throw "Chartboost appId/appSignature not passed. On iOS appId and appSignature parameters must be passed in Chartboost.init.";
-		}
-		#end
-		
-		Chartboost.initBindings();
-		
-		#if ios
-		init_chartboost(appId, appSignature);
-		#end
+	public static function init():Void {
+		AdMob.initBindings();
 	}
 	
-	public static function setListener(listener:ChartboostListener):Void {
+	public static function setListener(listener:AdMobListener):Void {
 		#if android
 		set_listener(listener);
 		#end
@@ -48,42 +38,20 @@ import flash.Lib;
 		return has_cached_interstitial(id);
 	}
 	
-	public static function showMoreApps(id:String):Void {
-		show_more_apps(id);
+	public static function showBanner(id:String):Void {
+		show_banner(id);
+	}
+
+	public static function hideBanner(id:String):Void {
+		hide_banner(id);
 	}
 	
-	public static function cacheMoreApps(id:String):Void {
-		cache_more_apps(id);
-	}
-	
-	public static function hasCachedMoreApps(id:String):Bool {
-		return has_cached_more_apps(id);
-	}
-	
-	public static function showRewardedVideo(id:String):Void {
-		show_rewarded_video(id);
-	}
-	
-	public static function cacheRewardedVideo(id:String):Void {
-		cache_rewarded_video(id);
-	}
-	
-	public static function hasCachedRewardedVideo(id:String):Bool {
-		return has_cached_rewarded_video(id);
-	}
-	
-	private static function initBindings() {
+	private static function initBindings():Void {
 		#if android
-		var packageName:String = "com/samcodes/chartboost/ChartboostExtension";
+		var packageName:String = "com/samcodes/chartboost/AdMobExtension";
 		#end
 		#if ios
-		var ndllName:String = "samcodeschartboost";
-		#end
-		
-		#if ios
-		if (init_chartboost == null) {
-			init_chartboost = Lib.load(ndllName, "init_chartboost", 2);
-		}
+		var ndllName:String = "samcodesadmob";
 		#end
 		
 		if (set_listener == null) {
@@ -118,68 +86,29 @@ import flash.Lib;
 			has_cached_interstitial = Lib.load(ndllName, "has_cached_interstitial", 1);
 			#end
 		}
-		if (show_more_apps == null) {
+		if (show_banner == null) {
 			#if android
-			show_more_apps = JNI.createStaticMethod(packageName, "showMoreApps", "(Ljava/lang/String;)V");
+			show_banner = JNI.createStaticMethod(packageName, "showBanner", "(Ljava/lang/String;)Z");
 			#end
 			#if ios
-			show_more_apps = Lib.load(ndllName, "show_more_apps", 1);
+			show_banner = Lib.load(ndllName, "show_banner", 1);
 			#end
 		}
-		if (cache_more_apps == null) {
+		if (hide_banner == null) {
 			#if android
-			cache_more_apps = JNI.createStaticMethod(packageName, "cacheMoreApps", "(Ljava/lang/String;)V");
+			hide_banner = JNI.createStaticMethod(packageName, "hideBanner", "(Ljava/lang/String;)Z");
 			#end
 			#if ios
-			cache_more_apps = Lib.load(ndllName, "cache_more_apps", 1);
-			#end
-		}
-		if (has_cached_more_apps == null) {
-			#if android
-			has_cached_more_apps = JNI.createStaticMethod(packageName, "hasCachedMoreApps", "(Ljava/lang/String;)Z");
-			#end
-			#if ios
-			has_cached_more_apps = Lib.load(ndllName, "has_cached_more_apps", 1);
-			#end
-		}
-		if (show_rewarded_video == null) {
-			#if android
-			show_rewarded_video = JNI.createStaticMethod(packageName, "showRewardedVideo", "(Ljava/lang/String;)V");
-			#end
-			#if ios
-			show_rewarded_video = Lib.load(ndllName, "show_rewarded_video", 1);
-			#end
-		}
-		if (cache_rewarded_video == null) {
-			#if android
-			cache_rewarded_video = JNI.createStaticMethod(packageName, "cacheRewardedVideo", "(Ljava/lang/String;)V");
-			#end
-			#if ios
-			cache_rewarded_video = Lib.load(ndllName, "cache_rewarded_video", 1);
-			#end
-		}
-		if (has_cached_rewarded_video == null) {
-			#if android
-			has_cached_rewarded_video = JNI.createStaticMethod(packageName, "hasCachedRewardedVideo", "(Ljava/lang/String;)Z");
-			#end
-			#if ios
-			has_cached_rewarded_video = Lib.load(ndllName, "has_cached_rewarded_video", 1);
+			hide_banner = Lib.load(ndllName, "hide_banner", 1);
 			#end
 		}
 	}
 	
-	#if ios
-	private static var init_chartboost:Dynamic = null;
-	#end
 	private static var set_listener:Dynamic = null;
 	private static var show_interstitial:Dynamic = null;
 	private static var cache_interstitial:Dynamic = null;
 	private static var has_cached_interstitial:Dynamic = null;
-	private static var show_more_apps:Dynamic = null;
-	private static var cache_more_apps:Dynamic = null;
-	private static var has_cached_more_apps:Dynamic = null;
-	private static var show_rewarded_video:Dynamic = null;
-	private static var cache_rewarded_video:Dynamic = null;
-	private static var has_cached_rewarded_video:Dynamic = null;
+	private static var show_banner:Dynamic = null;
+	private static var hide_banner:Dynamic = null;
 }
 #end

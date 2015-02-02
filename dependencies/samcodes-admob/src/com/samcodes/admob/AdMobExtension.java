@@ -263,7 +263,7 @@ public class AdMobExtension extends Extension
 		}
 	}
 	
-	public boolean addInterstitialForUnitId(String id) {
+	private InterstitialAd addInterstitialForUnitId(String id) {
 		if(unitIdToInterstitial.containsKey(id)) {
 			Log.e(TAG, "This interstitial is already in the ad unit id->interstitial map, replacing it...");
 		}
@@ -272,10 +272,10 @@ public class AdMobExtension extends Extension
 		ad.setAdUnitId(id);
 		ad.setAdListener(new MyAdListener(id));
 		
-		return true;
+		return ad;
 	}
 	
-	public boolean addBannerViewForUnitId(String id, int size) {
+	private AdView addBannerViewForUnitId(String id) {
 		if(unitIdToBannerView.containsKey(id)) {
 			Log.e(TAG, "This banner is already in the ad unit id->bannerview map, replacing it...");
 		}
@@ -285,18 +285,17 @@ public class AdMobExtension extends Extension
 		ad.setAdSize(size);
 		ad.setAdListener(new MyAdListener(id));
 		
-		// TODO Add view to view hierarchy?
-		
 		unitIdToBannerView.put(id, ad);
 		
-		return true;
+		return ad;
 	}
 	
 	private AdView getBannerViewForUnitId(String id) {
 		AdView ad = unitIdToBannerView.get(id);
 		
 		if(ad == null) {
-			Log.e(TAG, "Could not get banner view with id " + id + " did you add it?");
+			Log.i(TAG, "Could not get banner view with id, adding a new one...");
+			ad = addBannerViewForUnitId(id);
 		}
 		
 		return ad;
@@ -306,7 +305,8 @@ public class AdMobExtension extends Extension
 		AdView ad = unitIdToInterstitial.get(id);
 		
 		if(ad == null) {
-			Log.e(TAG, "Could not get interstitial with id " + id + " did you add it?");
+			Log.i(TAG, "Could not get interstitial with id " + id + " adding a new one...");
+			ad = addInterstitialForUnitId(id);
 		}
 		
 		return ad;
