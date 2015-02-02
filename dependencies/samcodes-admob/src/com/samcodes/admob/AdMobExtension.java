@@ -23,8 +23,8 @@ public class AdMobExtension extends Extension
 	private static String testDeviceId = "::ENV_AdmobTestDeviceId::";
 	
 	// Assumes 1:1 mapping from ad unit ids to ads
-	private HashMap<String, AdView> unitIdToBannerView = new HashMap<String, AdView>();
-	private HashMap<String, InterstitialAd> unitIdToInterstitial = new HashMap<String, InterstitialAd>();
+	private static HashMap<String, AdView> unitIdToBannerView = new HashMap<String, AdView>();
+	private static HashMap<String, InterstitialAd> unitIdToInterstitial = new HashMap<String, InterstitialAd>();
 	
 	public static HaxeObject callback = null;
 	public static void setListener(HaxeObject haxeCallback) {
@@ -32,139 +32,16 @@ public class AdMobExtension extends Extension
 		callback = haxeCallback;
 	}
 	
-	private class MyBannerListener extends AdListener {
-		private String id;
-		
-		public MyBannerListener(String id) {
-			this.id = id;
-		}
-		
-		public void callHaxe(final String name, final Object[] args) {
-			if(callback != null) {
-				callbackHandler.post(new Runnable() {
-					public void run() {
-						Log.d(TAG, "Calling " + name + " from Java");
-						callback.call(name, args);
-					}
-				});
-			} else {
-				Log.w(TAG, "AdMob callback object is null, ignoring AdMob callback");
-			}
-		}
-		
-		/** Called when an ad is clicked and about to return to the application. */
-		@Override
-		public void onAdClosed() {
-			Log.d(TAG, "onBannerClosed");
-			
-			callHaxe("onBannerClosed", new Object[] {id});
-		}
-		
-		/** Called when an ad failed to load. */
-		@Override
-		public void onAdFailedToLoad(int error) {
-			Log.d(TAG, "onBannerFailedToLoad: " + getErrorReason(error));
-			
-			callHaxe("onBannerFailedToLoad", new Object[] {id});
-		}
-		
-		/**
-		* Called when an ad is clicked and going to start a new Activity that will
-		* leave the application (e.g. breaking out to the Browser or Maps
-		* application).
-		*/
-		@Override
-		public void onAdLeftApplication() {
-			Log.d(TAG, "onBannerLeftApplication");
-			
-			callHaxe("onBannerLeftApplication", new Object[] {id});
-		}
-		
-		/**
-		* Called when an Activity is created in front of the app (e.g. an
-		* interstitial is shown, or an ad is clicked and launches a new Activity).
-		*/
-		@Override
-		public void onAdOpened() {
-			Log.d(TAG, "onBannerOpened");
-			
-			callHaxe("onBannerOpened", new Object[] {id});
-		}
-
-		/** Called when an ad is loaded. */
-		@Override
-		public void onAdLoaded() {
-			Log.d(TAG, "onBannerLoaded");
-			
-			callHaxe("onBannerLoaded", new Object[] {id});
-		}
-	}
-	
-	private class MyInterstitialListener extends AdListener {
-		private String id;
-		
-		public MyInterstitialListener(String id) {
-			this.id = id;
-		}
-		
-		public void callHaxe(final String name, final Object[] args) {
-			if(callback != null) {
-				callbackHandler.post(new Runnable() {
-					public void run() {
-						Log.d(TAG, "Calling " + name + " from Java");
-						callback.call(name, args);
-					}
-				});
-			} else {
-				Log.w(TAG, "AdMob callback object is null, ignoring AdMob callback");
-			}
-		}
-		
-		/** Called when an ad is clicked and about to return to the application. */
-		@Override
-		public void onAdClosed() {
-			Log.d(TAG, "onInterstitialClosed");
-			
-			callHaxe("onInterstitialClosed", new Object[] {id});
-		}
-		
-		/** Called when an ad failed to load. */
-		@Override
-		public void onAdFailedToLoad(int error) {
-			Log.d(TAG, "onInterstitialFailedToLoad: " + getErrorReason(error));
-			
-			callHaxe("onInterstitialFailedToLoad", new Object[] {id});
-		}
-		
-		/**
-		* Called when an ad is clicked and going to start a new Activity that will
-		* leave the application (e.g. breaking out to the Browser or Maps
-		* application).
-		*/
-		@Override
-		public void onAdLeftApplication() {
-			Log.d(TAG, "onInterstitialLeftApplication");
-			
-			callHaxe("onInterstitialLeftApplication", new Object[] {id});
-		}
-		
-		/**
-		* Called when an Activity is created in front of the app (e.g. an
-		* interstitial is shown, or an ad is clicked and launches a new Activity).
-		*/
-		@Override
-		public void onAdOpened() {
-			Log.d(TAG, "onInterstitialOpened");
-			
-			callHaxe("onInterstitialOpened", new Object[] {id});
-		}
-
-		/** Called when an ad is loaded. */
-		@Override
-		public void onAdLoaded() {
-			Log.d(TAG, "onInterstitialLoaded");
-			
-			callHaxe("onInterstitialLoaded", new Object[] {id});
+	public static void callHaxe(final String name, final Object[] args) {
+		if(callback != null) {
+			callbackHandler.post(new Runnable() {
+				public void run() {
+					Log.d(TAG, "Calling " + name + " from Java");
+					callback.call(name, args);
+				}
+			});
+		} else {
+			Log.w(TAG, "AdMob callback object is null, ignoring AdMob callback");
 		}
 	}
 	
@@ -211,7 +88,7 @@ public class AdMobExtension extends Extension
 		super.onDestroy();
 	}
 	
-	public void showBanner(String id) {
+	public static void showBanner(String id) {
 		final AdView view = getBannerViewForUnitId(id);
 		
 		if(view != null) {
@@ -224,7 +101,7 @@ public class AdMobExtension extends Extension
 		}
 	}
 	
-	public void hideBanner(String id) {
+	public static void hideBanner(String id) {
 		final AdView view = getBannerViewForUnitId(id);
 		
 		if(view != null) {
@@ -237,7 +114,7 @@ public class AdMobExtension extends Extension
 		}
 	}
 	
-	public boolean hasCachedInterstitial(String id) {
+	public static boolean hasCachedInterstitial(String id) {
 		InterstitialAd ad = getInterstitialForUnitId(id);
 		
 		if(ad == null) {
@@ -247,61 +124,81 @@ public class AdMobExtension extends Extension
 		return ad.isLoaded();
 	}
 	
-	public void cacheInterstitial(String id) {
-		InterstitialAd ad = getInterstitialForUnitId(id);
+	public static void cacheInterstitial(String id) {
+		final InterstitialAd ad = getInterstitialForUnitId(id);
 		
 		if(ad != null) {
-			AdRequest request = null;
-			
-			if(testDeviceId != "null") {
-				request = new AdRequest.Builder()
-				.addTestDevice(testDeviceId)
-				.build();
-			} else {
-				request = new AdRequest.Builder()
-				.build();
-			}
-
-			ad.loadAd(request);
+			mainActivity.runOnUiThread(new Runnable() {
+				public void run() {
+					AdRequest request = null;
+					
+					if(testDeviceId != "null") {
+						request = new AdRequest.Builder()
+						.addTestDevice(AdRequest.DEVICE_ID_EMULATOR)
+						.addTestDevice(testDeviceId) // TODO would be good to do more than one
+						.build();
+					} else {
+						request = new AdRequest.Builder()
+						.addTestDevice(AdRequest.DEVICE_ID_EMULATOR)
+						.build();
+					}
+				
+					ad.loadAd(request);
+				}
+			});
 		}
 	}
 	
-	public void showInterstitial(String id) {
-		InterstitialAd ad = getInterstitialForUnitId(id);
+	public static void showInterstitial(String id) {
+		final InterstitialAd ad = getInterstitialForUnitId(id);
 		
 		if(ad != null) {
-			ad.show();
+			mainActivity.runOnUiThread(new Runnable() {
+				public void run() {
+					ad.show();
+				}
+			});
 		}
 	}
 	
-	private InterstitialAd addInterstitialForUnitId(String id) {
+	private static InterstitialAd addInterstitialForUnitId(final String id) {
 		if(unitIdToInterstitial.containsKey(id)) {
 			Log.e(TAG, "This interstitial is already in the ad unit id->interstitial map, replacing it...");
 		}
 		
-		InterstitialAd ad = new InterstitialAd(mainActivity);
-		ad.setAdUnitId(id);
-		ad.setAdListener(new MyInterstitialListener(id));
+		final InterstitialAd ad = new InterstitialAd(mainActivity);
+		
+		mainActivity.runOnUiThread(new Runnable() {
+			public void run() {
+				ad.setAdUnitId(id);
+				ad.setAdListener(new InterstitialListener(id));
+			}
+		});
 		
 		return ad;
 	}
 	
-	private AdView addBannerViewForUnitId(String id) {
+	private static AdView addBannerViewForUnitId(final String id) {
 		if(unitIdToBannerView.containsKey(id)) {
 			Log.e(TAG, "This banner is already in the ad unit id->bannerview map, replacing it...");
 		}
 		
-		AdView ad = new AdView(mainActivity);
-		ad.setAdUnitId(id);
-		//ad.setAdSize(size); // TODO need to set view parameters
-		ad.setAdListener(new MyBannerListener(id));
+		final AdView ad = new AdView(mainActivity);
+		
+		mainActivity.runOnUiThread(new Runnable() {
+			public void run() {
+				ad.setAdUnitId(id);
+				//ad.setAdSize(size); // TODO need to set view parameters
+				ad.setAdListener(new BannerListener(id));
+			}
+		});
 		
 		unitIdToBannerView.put(id, ad);
 		
 		return ad;
 	}
 	
-	private AdView getBannerViewForUnitId(String id) {
+	private static AdView getBannerViewForUnitId(String id) {
 		AdView ad = unitIdToBannerView.get(id);
 		
 		if(ad == null) {
@@ -312,7 +209,7 @@ public class AdMobExtension extends Extension
 		return ad;
 	}
 	
-	private InterstitialAd getInterstitialForUnitId(String id) {
+	private static InterstitialAd getInterstitialForUnitId(String id) {
 		InterstitialAd ad = unitIdToInterstitial.get(id);
 		
 		if(ad == null) {
@@ -324,7 +221,7 @@ public class AdMobExtension extends Extension
 	}
 	
 	/** Gets a string error reason from an error code. */
-	private String getErrorReason(int errorCode) {
+	public static String getErrorReason(int errorCode) {
 		String errorReason = "";
 		switch(errorCode) {
 			case AdRequest.ERROR_CODE_INTERNAL_ERROR:

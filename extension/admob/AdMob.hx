@@ -9,7 +9,7 @@ import flash.Lib;
 #end
 
 #if (android || ios)
-@:allow(extension.Chartboost) class AdMob
+@:allow(extension.AdMob) class AdMob
 {
 	// Must be called before use of any other methods in this class
 	public static function init():Void {
@@ -48,7 +48,7 @@ import flash.Lib;
 	
 	private static function initBindings():Void {
 		#if android
-		var packageName:String = "com/samcodes/chartboost/AdMobExtension";
+		var packageName:String = "com/samcodes/admob/AdMobExtension";
 		#end
 		#if ios
 		var ndllName:String = "samcodesadmob";
@@ -88,7 +88,7 @@ import flash.Lib;
 		}
 		if (show_banner == null) {
 			#if android
-			show_banner = JNI.createStaticMethod(packageName, "showBanner", "(Ljava/lang/String;)Z");
+			show_banner = JNI.createStaticMethod(packageName, "showBanner", "(Ljava/lang/String;)V");
 			#end
 			#if ios
 			show_banner = Lib.load(ndllName, "show_banner", 1);
@@ -96,7 +96,7 @@ import flash.Lib;
 		}
 		if (hide_banner == null) {
 			#if android
-			hide_banner = JNI.createStaticMethod(packageName, "hideBanner", "(Ljava/lang/String;)Z");
+			hide_banner = JNI.createStaticMethod(packageName, "hideBanner", "(Ljava/lang/String;)V");
 			#end
 			#if ios
 			hide_banner = Lib.load(ndllName, "hide_banner", 1);
