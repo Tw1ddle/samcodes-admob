@@ -39,10 +39,12 @@ static NSMutableArray* testDevices;
 }
 
 -(GADInterstitial*)getInterstitialForAdUnit:(NSString*)location {
-	id interstitial = [interstitialDictionary objectForKey:location];
+	GADInterstitial* interstitial = (GADInterstitial*)([interstitialDictionary objectForKey:location]);
 	
 	if(interstitial == nil) {
-		
+		interstitial = [[GADInterstitial alloc] init];
+		interstitial.delegate = self;
+		interstitial.adUnitID = location;
 		
 		[interstitialDictionary setObject:interstitial forKey:location];
 	}
@@ -51,7 +53,7 @@ static NSMutableArray* testDevices;
 }
 
 -(GADBannerView*)getBannerForAdUnit:(NSString*)location {
-	id banner = [bannerDictionary objectForKey:location];
+	GADBannerView* banner = (GADBannerView*)([bannerDictionary objectForKey:location]);
 	
 	if(banner == nil) {
 		if([UIApplication sharedApplication].statusBarOrientation == UIInterfaceOrientationLandscapeLeft ||
@@ -62,6 +64,7 @@ static NSMutableArray* testDevices;
 		}
 		
 		banner.adUnitID = location;
+		banner.delegate = self;
 		banner.rootViewController = [[[UIApplication sharedApplication] keyWindow] rootViewController];
 		CGRect frame = banner.frame;
 		frame.origin.y = banner.rootViewController.view.bounds.size.height - frame.size.height;
@@ -101,8 +104,8 @@ static NSMutableArray* testDevices;
 }
 
 - (void)adView:(GADBannerView *)adView didFailToReceiveAdWithError:(GADRequestError *)error {
-	if(adView.superView) {
-		[adView removeFromSuperView];
+	if(adView.superview) {
+		[adView removeFromSuperview];
 	}
 	
 	adView.hidden = true;
@@ -111,7 +114,7 @@ static NSMutableArray* testDevices;
 }
 
 - (void)adViewWillPresentScreen:(GADBannerView *)adView {
-	[adView.rootViewController addSubView:banner];
+	[adView.rootViewController addSubView:adView];
 	adView.hidden = false;
 	
 	sendAdMobEvent("onBannerOpened", [adView.adUnitID cStringUsingEncoding:[NSString defaultCStringEncoding]]);
@@ -192,8 +195,8 @@ namespace samcodesadmob
 		AdMobImplementation *instance = [AdMobImplementation sharedInstance];
 		GADBannerView* banner = [instance getBannerForAdUnit:nsLocation];
 		
-		if(banner.superView) {
-			[banner removeFromSuperView];
+		if(banner.superview) {
+			[banner removeFromSuperview];
 		}
 		
 		banner.hidden = true;
