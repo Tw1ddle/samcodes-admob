@@ -22,15 +22,17 @@ extern "C" void sendAdMobEvent(const char* type, const char* location);
 
 static NSMutableDictionary* bannerDictionary;
 static NSMutableDictionary* interstitialDictionary;
+static NSMutableArray* testDevices;
 
-+ (AdMobImplementation*)sharedInstance
-{
++ (AdMobImplementation*)sharedInstance {
    static AdMobImplementation* sharedInstance = nil;
    static dispatch_once_t onceToken;
    dispatch_once(&onceToken, ^{
       sharedInstance = [[self alloc] init];	  
 	  bannerDictionary = [[NSMutableDictionary alloc] init];
 	  interstitialDictionary = [[NSMutableDictionary alloc] init];
+	  testDevices = [[NSMutableArray alloc] init];
+	  [testDevices addObject:GAD_SIMULATOR_ID];
    });
 
    return sharedInstance;
@@ -40,6 +42,9 @@ static NSMutableDictionary* interstitialDictionary;
 	id interstitial = [interstitialDictionary objectForKey:location];
 	
 	if(interstitial == nil) {
+		
+		
+		[interstitialDictionary setObject:interstitial forKey:location];
 	}
 	
 	return interstitial;
@@ -49,6 +54,20 @@ static NSMutableDictionary* interstitialDictionary;
 	id banner = [bannerDictionary objectForKey:location];
 	
 	if(banner == nil) {
+		if([UIApplication sharedApplication].statusBarOrientation == UIInterfaceOrientationLandscapeLeft ||
+		[UIApplication sharedApplication].statusBarOrientation == UIInterfaceOrientationLandscapeRight) {
+			banner = [[GADBannerView alloc] initWithAdSize:kGADAdSizeSmartBannerLandscape];
+		} else {
+			banner = [[GADBannerView alloc] initWithAdSize:kGADAdSizeSmartBannerPortrait];
+		}
+		
+		banner.adUnitID = location;
+		banner.rootViewController = [[[UIApplication sharedApplication] keyWindow] rootViewController];
+		CGRect frame = banner.frame;
+		frame.origin.y = banner.rootViewController.view.bounds.size.height - frame.size.height;
+		banner.frame = frame;
+		
+		[bannerDictionary setObject:banner forKey:location];
 	}
 	
 	return banner;
@@ -82,10 +101,19 @@ static NSMutableDictionary* interstitialDictionary;
 }
 
 - (void)adView:(GADBannerView *)adView didFailToReceiveAdWithError:(GADRequestError *)error {
+	if(adView.superView) {
+		[adView removeFromSuperView];
+	}
+	
+	adView.hidden = true;
+	
 	sendAdMobEvent("onBannerFailedToLoad", [adView.adUnitID cStringUsingEncoding:[NSString defaultCStringEncoding]]);
 }
 
 - (void)adViewWillPresentScreen:(GADBannerView *)adView {
+	[adView.rootViewController addSubView:banner];
+	adView.hidden = false;
+	
 	sendAdMobEvent("onBannerOpened", [adView.adUnitID cStringUsingEncoding:[NSString defaultCStringEncoding]]);
 }
 
@@ -109,9 +137,7 @@ namespace samcodesadmob
     void initAdMob(const char* testDeviceHash)
     {
 		NSString *nsTestDeviceHash = [[NSString alloc] initWithUTF8String:testDeviceHash];
-		AdMobImplementation *instance = [AdMobImplementation sharedInstance];
-		
-		
+		[testDevices addObject:nsTestDeviceHash];
     }
 	
 	void showInterstitial(const char* location)
@@ -134,7 +160,7 @@ namespace samcodesadmob
 		GADInterstitial* interstitial = [instance getInterstitialForAdUnit:nsLocation];
 		
 		GADRequest *request = [GADRequest request];
-		request.testDevices = @[ GAD_SIMULATOR_ID ]; // TODO add testDeviceHash
+		request.testDevices = testDevices;
 		[interstitial loadRequest:request];
     }
 	
@@ -153,6 +179,10 @@ namespace samcodesadmob
 		AdMobImplementation *instance = [AdMobImplementation sharedInstance];
 		GADBannerView* banner = [instance getBannerForAdUnit:nsLocation];
 		
+		GADRequest *request = [GADRequest request];
+		request.testDevices = testDevices;
+		[banner loadRequest:request];
+		
 		banner.hidden = false;
     }
 	
@@ -161,6 +191,10 @@ namespace samcodesadmob
         NSString *nsLocation = [[NSString alloc] initWithUTF8String:location];
 		AdMobImplementation *instance = [AdMobImplementation sharedInstance];
 		GADBannerView* banner = [instance getBannerForAdUnit:nsLocation];
+		
+		if(banner.superView) {
+			[banner removeFromSuperView];
+		}
 		
 		banner.hidden = true;
     }
