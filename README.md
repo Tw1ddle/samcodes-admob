@@ -2,19 +2,19 @@
 
 Unofficial AdMob banner and interstitial ads for iOS and Android Haxe/OpenFL targets.
 
-WORK IN PROGRESS
-
 ### Features ###
 
 Supports:
 * Caching and showing interstitial ads.
-* Multiple ad units.
-* Customizable listener for reacting to SDK events.
 * Showing and hiding banner ads.
+* Multiple ads and ad units.
+* Customizable listener for reacting to SDK events.
 
 Doesn't support:
-* Customizable banner ad locations or sizes (coming soon).
-* Displaying more than one banner at any time.
+* Customizable banner ad locations or sizes.
+* Displaying more than one banner at a time.
+* IAP functionality.
+* DoubleClick ads or mediation.
 
 ### Install ###
 
@@ -52,6 +52,9 @@ AdMob.cacheInterstitial("my_ad_unit_id"); // Cache interstitial with the given i
 if(AdMob.hasCachedInterstitial("my_ad_unit_id") {
 	AdMob.showInterstitial("my_ad_unit_id"); // Shows an interstitial with the given id. If this is called and the ad isn't cached, then it will issue a cache request and show if as soon as it caches.
 }
+
+AdMob.showBanner(); // Shows a banner
+AdMob.hideBanner(); // Hides a visible banner
 ```
 
 ### Example ###
