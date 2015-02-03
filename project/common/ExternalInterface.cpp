@@ -13,21 +13,21 @@ using namespace samcodesadmob;
 
 #ifdef IPHONE
 
-AutoGCRoot* chartboostEventHandle = 0;
+AutoGCRoot* adMobEventHandle = 0;
 
 static value set_listener(value onEvent)
 {
-	chartboostEventHandle = new AutoGCRoot(onEvent);
+	adMobEventHandle = new AutoGCRoot(onEvent);
 	return alloc_null();
 }
 DEFINE_PRIM(set_listener, 1);
 
-static value init_chartboost(value id, value signature)
+static value init_admob(value hashed_device_id)
 {
     initChartboost(val_string(id), val_string(signature));
     return alloc_null();
 }
-DEFINE_PRIM(init_chartboost, 2);
+DEFINE_PRIM(init_admob, 1);
 
 static value show_interstitial(value location)
 {
@@ -49,61 +49,35 @@ static value has_cached_interstitial(value location)
 }
 DEFINE_PRIM(has_cached_interstitial, 1);
 
-static value show_more_apps(value location)
+static value show_banner(value location)
 {
-	showMoreApps(val_string(location));
+	showBanner(val_string(location));
 	return alloc_null();
 }
-DEFINE_PRIM(show_more_apps, 1);
+DEFINE_PRIM(show_banner, 1);
 
-static value cache_more_apps(value location)
+static value hide_banner(value location)
 {
-	cacheMoreApps(val_string(location));
+	hideBanner(val_string(location));
 	return alloc_null();
 }
-DEFINE_PRIM(cache_more_apps, 1);
+DEFINE_PRIM(hide_banner, 1);
 
-static value has_cached_more_apps(value location)
-{
-	return alloc_bool(hasCachedMoreApps(val_string(location)));
-}
-DEFINE_PRIM(has_cached_more_apps, 1);
-
-static value show_rewarded_video(value location)
-{
-	showRewardedVideo(val_string(location));
-	return alloc_null();
-}
-DEFINE_PRIM(show_rewarded_video, 1);
-
-static value cache_rewarded_video(value location)
-{
-	cacheRewardedVideo(val_string(location));
-	return alloc_null();
-}
-DEFINE_PRIM(cache_rewarded_video, 1);
-
-static value has_cached_rewarded_video(value location)
-{
-	return alloc_bool(hasCachedRewardedVideo(val_string(location)));
-}
-DEFINE_PRIM(has_cached_rewarded_video, 1);
-
-extern "C" void samcodeschartboost_main()
+extern "C" void samcodesadmob_main()
 {
 	val_int(0);
 }
-DEFINE_ENTRY_POINT(samcodeschartboost_main);
+DEFINE_ENTRY_POINT(samcodesadmob_main);
 
-extern "C" int samcodeschartboost_register_prims()
+extern "C" int samcodesadmob_register_prims()
 { 
 	return 0; 
 }
 
 // TODO need to do this more cleanly
-extern "C" void sendChartboostEvent(const char* type, const char* location, const char* uri, int reward_coins)
+extern "C" void sendAdmobEvent(const char* type, const char* location)
 {
-    if(chartboostEventHandle == 0)
+    if(adMobEventHandle == 0)
     {
         return;
     }
@@ -111,9 +85,7 @@ extern "C" void sendChartboostEvent(const char* type, const char* location, cons
 	value o = alloc_empty_object();
     alloc_field(o, val_id("type"), alloc_string(type));
     alloc_field(o, val_id("location"), alloc_string(location));
-	alloc_field(o, val_id("uri"), alloc_string(uri));
-	alloc_field(o, val_id("reward_coins"), alloc_int(reward_coins));
-	val_call1(chartboostEventHandle->get(), o);
+	val_call1(adMobEventHandle->get(), o);
 }
 
 #endif
