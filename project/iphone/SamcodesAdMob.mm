@@ -16,6 +16,8 @@
 -(GADInterstitial*)getInterstitialForAdUnit:(NSString*)location;
 -(GADBannerView*)getBannerForAdUnit:(NSString*)location;
 
+@end
+
 @implementation AdMobImplementation
 
 + (AdMobImplementation*)sharedInstance
@@ -62,7 +64,7 @@
 }
 
 - (void)interstitialWillDismissScreen:(GADInterstitial *)ad {
-	sendAdMobEvent("onInterstitialClosed, [ad.adUnitID cStringUsingEncoding:[NSString defaultCStringEncoding]]);
+	sendAdMobEvent("onInterstitialClosed", [ad.adUnitID cStringUsingEncoding:[NSString defaultCStringEncoding]]);
 }
 
 - (void)interstitialDidDismissScreen:(GADInterstitial *)ad {
