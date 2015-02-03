@@ -10,7 +10,7 @@
 
 @interface AdMobImplementation : NSObject <GADInterstitialDelegate, GADBannerViewDelegate> {
 	NSMutableDictionary* bannerDictionary;
-	NSMutableDIctionary* interstitialDictionary;
+	NSMutableDictionary* interstitialDictionary;
 }
 
 -(GADInterstitial*)getInterstitialForAdUnit:(NSString*)location;
@@ -113,7 +113,7 @@ namespace samcodesadmob
 	{
         NSString *nsLocation = [[NSString alloc] initWithUTF8String:location];
 		AdMobImplementation *instance = [AdMobImplementation sharedInstance];
-		GADInterstitialView* interstitial = [instance getInterstitialForAdUnit:nsLocation];
+		GADInterstitial* interstitial = [instance getInterstitialForAdUnit:nsLocation];
 		
 		if([interstitial isReady]) {
 			[ad presentFromRootViewController:[[[UIApplication sharedApplication] keyWindow] rootViewController]];
@@ -126,7 +126,7 @@ namespace samcodesadmob
     {
         NSString *nsLocation = [[NSString alloc] initWithUTF8String:location];
 		AdMobImplementation *instance = [AdMobImplementation sharedInstance];
-		GADInterstitialView* interstitial = [instance getInterstitialForAdUnit:nsLocation];
+		GADInterstitial* interstitial = [instance getInterstitialForAdUnit:nsLocation];
 		
 		GADRequest *request = [GADRequest request];
 		request.testDevices = @[ GAD_SIMULATOR_ID ]; // TODO add testDeviceHash
@@ -137,7 +137,7 @@ namespace samcodesadmob
     {
         NSString *nsLocation = [[NSString alloc] initWithUTF8String:location];
 		AdMobImplementation *instance = [AdMobImplementation sharedInstance];
-		GADInterstitialView* interstitial = [instance getInterstitialForAdUnit:nsLocation];
+		GADInterstitial* interstitial = [instance getInterstitialForAdUnit:nsLocation];
 		
 		return [interstitial isReady];
     }
