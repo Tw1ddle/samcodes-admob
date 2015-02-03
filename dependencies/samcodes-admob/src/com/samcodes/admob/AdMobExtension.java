@@ -18,6 +18,8 @@ import java.util.Timer;
 import java.util.TimerTask;
 import java.util.concurrent.Semaphore;
 import java.util.concurrent.atomic.AtomicBoolean;
+import android.widget.RelativeLayout;
+import android.view.Gravity;
 
 import com.google.android.gms.ads.*;
 
@@ -25,6 +27,19 @@ public class AdMobExtension extends Extension
 {
 	private static String TAG = "AdMobExtension";
 	private static String testDeviceId = "::ENV_AdmobTestDeviceId::";
+	private static RelativeLayout bannerLayout = null;
+	private static int gravity = Gravity.BOTTOM | Gravity.CENTER_HORIZONTAL;
+	public static RelativeLayout getLayout() {
+		if(bannerLayout == null) {
+			bannerLayout = new RelativeLayout(mainActivity);
+			bannerLayout.setGravity(gravity);
+			RelativeLayout.LayoutParams p = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.MATCH_PARENT, RelativeLayout.LayoutParams.MATCH_PARENT);					
+			mainActivity.addContentView(bannerLayout, p);
+			bannerLayout.bringToFront();
+		}
+		
+		return bannerLayout;
+	}
 	
 	// Assumes 1:1 mapping from ad unit ids to ads
 	private static HashMap<String, AdView> unitIdToBannerView = new HashMap<String, AdView>();
@@ -47,16 +62,6 @@ public class AdMobExtension extends Extension
 		} else {
 			Log.w(TAG, "AdMob callback object is null, ignoring AdMob callback");
 		}
-	}
-	
-	@Override
-	public void onCreate (Bundle savedInstanceState) {
-		super.onCreate(savedInstanceState);
-	}
-	
-	@Override
-	public void onStart() {
-		super.onStart();
 	}
 	
 	@Override
@@ -98,9 +103,28 @@ public class AdMobExtension extends Extension
 		if(view != null) {
 			mainActivity.runOnUiThread(new Runnable() {
 				public void run() {
-					// TODO add banner view to view hierarchy?
-					Log.d(TAG, "Showing banner with id " + id);
-					view.setVisibility(View.VISIBLE);
+					AdRequest request = null;
+					
+					if(testDeviceId != "null") {
+						request = new AdRequest.Builder()
+						.addTestDevice(AdRequest.DEVICE_ID_EMULATOR)
+						.addTestDevice(testDeviceId)
+						.build();
+					} else {
+						request = new AdRequest.Builder()
+						.addTestDevice(AdRequest.DEVICE_ID_EMULATOR)
+						.build();
+					}
+					
+					if(view.getAdListener() == null) {
+						view.setAdListener(new BannerListener(id));
+					} else if(view.getAdListener().getClass().equals(BannerListener.class) == false) {
+						view.setAdListener(new BannerListener(id));
+					}
+					
+					Log.d(TAG, "Preparing to show banner with id " + id);
+					
+					view.loadAd(request);
 				}
 			});
 		}
@@ -112,9 +136,10 @@ public class AdMobExtension extends Extension
 		if(view != null) {
 			mainActivity.runOnUiThread(new Runnable() {
 				public void run() {
-					// TODO remove banner view from view hierarchy?
 					Log.d(TAG, "Hiding banner with id " + id);
 					view.setVisibility(View.INVISIBLE);
+					getLayout().removeAllViews();
+					getLayout().bringToFront();
 				}
 			});
 		}
@@ -127,6 +152,8 @@ public class AdMobExtension extends Extension
 			return false;
 		}
 		
+		// For some reason AdMob checking if an ad is loaded has to happen on the UI thread
+		// Since this is probably a fast operation I wait for the result
 		final Semaphore mutex = new Semaphore(0);
 		final AtomicBoolean isLoaded = new AtomicBoolean();
 		
@@ -157,7 +184,7 @@ public class AdMobExtension extends Extension
 					if(testDeviceId != "null") {
 						request = new AdRequest.Builder()
 						.addTestDevice(AdRequest.DEVICE_ID_EMULATOR)
-						.addTestDevice(testDeviceId) // TODO would be good to do more than one
+						.addTestDevice(testDeviceId)
 						.build();
 					} else {
 						request = new AdRequest.Builder()
@@ -198,8 +225,8 @@ public class AdMobExtension extends Extension
 					}
 				});
 			} else {
-				Log.w(TAG, "Attempted to show interstitial that had not been cached. Sending another cache request instead, will show interstitial once it has cached (timeout 1 minute)");
-				Log.w(TAG, "Note this implies that if this interstitial is cached in the near future it will shown");
+				Log.w(TAG, "Attempted to show interstitial that had not been cached. Sending a cache request now. Will show interstitial immediately once it has cached (timeout = 1 minute)");
+				Log.w(TAG, "If this interstitial gets cached from this or a future cache request, it will shown immediately. This will be annoying for your users. Avoid this by guarding with hasCachedInterstitial from Haxe.");
 				cacheInterstitial(id);
 				
 				final Timer timer = new Timer();
@@ -230,11 +257,7 @@ public class AdMobExtension extends Extension
 		}
 	}
 	
-	private static InterstitialAd addInterstitialForUnitId(final String id) {
-		if(unitIdToInterstitial.containsKey(id)) {
-			Log.e(TAG, "This interstitial is already in the ad unit id->interstitial map...");
-		}
-		
+	private static InterstitialAd addInterstitialForUnitId(final String id) {		
 		final InterstitialAd ad = new InterstitialAd(mainActivity);
 		
 		if(ad.getAdUnitId() == null) {
@@ -248,27 +271,24 @@ public class AdMobExtension extends Extension
 		return ad;
 	}
 	
-	private static AdView addBannerViewForUnitId(final String id) {
-		if(unitIdToBannerView.containsKey(id)) {
-			Log.e(TAG, "This banner is already in the ad unit id->bannerview map...");
-		}
-		
+	private static AdView addBannerViewForUnitId(final String id) {		
 		final AdView ad = new AdView(mainActivity);
 		
 		if(ad.getAdUnitId() == null) {
 			ad.setAdUnitId(id);
-			Log.d(TAG, "Ad unit id was null, setting to " + id);
 		} else if(ad.getAdUnitId().equals(id) == false) {
 			ad.setAdUnitId(id);
-			Log.d(TAG, "Ad unit id was equal to " + ad.getAdUnitId() + " setting it to " + id);
 		}
+		
+		// TODO could look up options set from Haxe here
+		ad.setAdSize(AdSize.SMART_BANNER);
 		
 		unitIdToBannerView.put(id, ad);
 		
 		return ad;
 	}
 	
-	private static AdView getBannerViewForUnitId(String id) {
+	public static AdView getBannerViewForUnitId(String id) {
 		AdView ad = unitIdToBannerView.get(id);
 		
 		if(ad == null) {
