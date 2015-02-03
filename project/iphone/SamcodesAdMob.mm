@@ -114,7 +114,7 @@ static NSMutableArray* testDevices;
 }
 
 - (void)adViewWillPresentScreen:(GADBannerView *)adView {
-	[adView.rootViewController addSubView:adView];
+	[adView.rootViewController addSubview:adView];
 	adView.hidden = false;
 	
 	sendAdMobEvent("onBannerOpened", [adView.adUnitID cStringUsingEncoding:[NSString defaultCStringEncoding]]);
