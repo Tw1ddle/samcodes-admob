@@ -60,12 +60,63 @@ class AdMobListener
 		log("onInterstitialLoaded " + unitId);
 	}
 	
-	// TODO iOS events - there are far better ways of doing this
+	// TODO there are far better ways of doing this
 	
 	#if ios
-	// Events
+	// Banner events
+	public static inline var ON_BANNER_CLOSED:String = "onBannerClosed";
+	public static inline var ON_BANNER_FAILED_TO_LOAD:String = "onBannerFailedToLoad";
+	public static inline var ON_BANNER_LEFT_APPLICATION:String = "onBannerLeftApplication";
+	public static inline var ON_BANNER_OPENED:String = "onBannerOpened";
+	public static inline var ON_BANNER_LOADED:String = "onBannerLoaded";
+	
+	// Interstitial events
+	public static inline var ON_INTERSTITIAL_CLOSED:String = "onInterstitialClosed";
+	public static inline var ON_INTERSTITIAL_FAILED_TO_LOAD:String = "onInterstitialFailedToLoad";
+	public static inline var ON_INTERSTITIAL_LEFT_APPLICATION:String = "onInterstitialLeftApplication";
+	public static inline var ON_INTERSTITIAL_OPENED:String = "onInterstitialOpened";
+	public static inline var ON_INTERSTITIAL_LOADED:String = "onInterstitialLoaded";
 	
 	public function notify(inEvent:Dynamic):Void {
+		var type:String = "";
+		var location:String = "";
+		
+		if (Reflect.hasField(inEvent, "type")) {
+			type = Std.string (Reflect.field (inEvent, "type"));
+		}
+		
+		if (Reflect.hasField(inEvent, "location")) {
+			location = Std.string (Reflect.field (inEvent, "location"));
+		}
+		
+		switch(type) {
+			case ON_BANNER_CLOSED:
+				onBannerClosed(location);
+			case ON_BANNER_FAILED_TO_LOAD:
+				onBannerFailedToLoad(location);
+			case ON_BANNER_LEFT_APPLICATION:
+				onBannerLeftApplication(location);
+			case ON_BANNER_OPENED:
+				onBannerOpened(location);
+			case ON_BANNER_LOADED:
+				onBannerLoaded(location);
+				
+			case ON_INTERSTITIAL_CLOSED:
+				onInterstitialClosed(location);
+			case ON_INTERSTITIAL_FAILED_TO_LOAD:
+				onInterstitialFailedToLoad(location);
+			case ON_INTERSTITIAL_LEFT_APPLICATION:
+				onInterstitialLeftApplication(location);
+			case ON_INTERSTITIAL_OPENED:
+				onInterstitialOpened(location);
+			case ON_INTERSTITIAL_LOADED:
+				onInterstitialLoaded(location);
+				
+			default:
+			{
+				trace("Unhandled AdMob event. There shouldn't be any of these. Event type was [" + type + "]");
+			}
+		}
 	}
 	#end
 }
