@@ -11,8 +11,6 @@
 extern "C" void sendAdMobEvent(const char* type, const char* location);
 
 @interface AdMobImplementation : NSObject <GADInterstitialDelegate, GADBannerViewDelegate> {
-	static NSMutableDictionary* bannerDictionary;
-	static NSMutableDictionary* interstitialDictionary;
 }
 
 -(GADInterstitial*)getInterstitialForAdUnit:(NSString*)location;
@@ -22,9 +20,12 @@ extern "C" void sendAdMobEvent(const char* type, const char* location);
 
 @implementation AdMobImplementation
 
+static NSMutableDictionary* bannerDictionary;
+static NSMutableDictionary* interstitialDictionary;
+
 + (AdMobImplementation*)sharedInstance
 {
-   static AdImplementation* sharedInstance = nil;
+   static AdMobImplementation* sharedInstance = nil;
    static dispatch_once_t onceToken;
    dispatch_once(&onceToken, ^{
       sharedInstance = [[self alloc] init];	  
