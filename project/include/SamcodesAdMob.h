@@ -8,7 +8,7 @@ namespace samcodesadmob
     void cacheInterstitial(const char* location);
     bool hasCachedInterstitial(const char* location);
 	void showBanner(const char* location);
-	void hideBanner(const char* location);	
+	void hideBanner(const char* location);
 }
 
 #endif

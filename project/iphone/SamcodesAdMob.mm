@@ -9,9 +9,45 @@
 #import "GADBannerView.h"
 
 @interface AdMobImplementation : NSObject <GADInterstitialDelegate, GADBannerViewDelegate> {
+	NSMutableDictionary* bannerDictionary;
+	NSMutableDIctionary* interstitialDictionary;
 }
 
+-(GADInterstitial*)getInterstitialForAdUnit:(NSString*)location;
+-(GADBannerView*)getBannerForAdUnit:(NSString*)location;
+
 @implementation AdMobImplementation
+
++ (AdMobImplementation*)sharedInstance
+{
+   static AdImplementation* sharedInstance = nil;
+   static dispatch_once_t onceToken;
+   dispatch_once(&onceToken, ^{
+      sharedInstance = [[self alloc] init];	  
+	  bannerDictionary = [[NSMutableDictionary alloc] init];
+	  interstitialDictionary = [[NSMutableDictionary alloc] init];
+   });
+
+   return sharedInstance;
+}
+
+-(GADInterstitial*)getInterstitialForAdUnit:(NSString*)location {
+	id interstitial = [interstitialDictionary objectForKey:location];
+	
+	if(interstitial == nil) {
+	}
+	
+	return interstitial;
+}
+
+-(GADBannerView*)getBannerForAdUnit:(NSString*)location {
+	id banner = [bannerDictionary objectForKey:location];
+	
+	if(banner == nil) {
+	}
+	
+	return banner;
+}
 
 - (void)interstitialDidReceiveAd:(GADInterstitial *)ad {
 	sendAdMobEvent("onInterstitialLoaded", [ad.adUnitID cStringUsingEncoding:[NSString defaultCStringEncoding]]);
@@ -53,7 +89,6 @@
 }
 
 - (void)adViewDidDismissScreen:(GADBannerView *)adView {
-	
 }
 
 - (void)adViewWillLeaveApplication:(GADBannerView *)adView {
@@ -65,40 +100,63 @@
 extern "C" void sendAdMobEvent(const char* type, const char* location);
 
 namespace samcodesadmob
-{	
+{
     void initAdMob(const char* testDeviceHash)
     {
+		NSString *nsTestDeviceHash = [[NSString alloc] initWithUTF8String:testDeviceHash];
+		AdMobImplementation *instance = [AdMobImplementation sharedInstance];
 		
-		// TODO
+		
     }
 	
 	void showInterstitial(const char* location)
 	{
         NSString *nsLocation = [[NSString alloc] initWithUTF8String:location];
+		AdMobImplementation *instance = [AdMobImplementation sharedInstance];
+		GADInterstitialView* interstitial = [instance getInterstitialForAdUnit:nsLocation];
 		
+		if([interstitial isReady]) {
+			[ad presentFromRootViewController:[[[UIApplication sharedApplication] keyWindow] rootViewController]];
+		} else {
+			// TODO serve cache request and then check if ready with a timer
+		}
     }
 	
     void cacheInterstitial(const char* location)
     {
         NSString *nsLocation = [[NSString alloc] initWithUTF8String:location];
+		AdMobImplementation *instance = [AdMobImplementation sharedInstance];
+		GADInterstitialView* interstitial = [instance getInterstitialForAdUnit:nsLocation];
 		
+		GADRequest *request = [GADRequest request];
+		request.testDevices = @[ GAD_SIMULATOR_ID ]; // TODO add testDeviceHash
+		[interstitial loadRequest:request];
     }
 	
     bool hasCachedInterstitial(const char* location)
     {
         NSString *nsLocation = [[NSString alloc] initWithUTF8String:location];
+		AdMobImplementation *instance = [AdMobImplementation sharedInstance];
+		GADInterstitialView* interstitial = [instance getInterstitialForAdUnit:nsLocation];
 		
+		return [interstitial isReady];
     }
 	
-    bool showBanner(const char* location)
+    void showBanner(const char* location)
     {
         NSString *nsLocation = [[NSString alloc] initWithUTF8String:location];
+		AdMobImplementation *instance = [AdMobImplementation sharedInstance];
+		GADBannerView* banner = [instance getBannerForAdUnit:nsLocation];
 		
+		banner.hidden = false;
     }
 	
-    bool hideBanner(const char* location)
+    void hideBanner(const char* location)
     {
         NSString *nsLocation = [[NSString alloc] initWithUTF8String:location];
+		AdMobImplementation *instance = [AdMobImplementation sharedInstance];
+		GADBannerView* banner = [instance getBannerForAdUnit:nsLocation];
 		
+		banner.hidden = true;
     }
 }
