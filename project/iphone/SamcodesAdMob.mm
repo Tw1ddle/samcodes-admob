@@ -121,7 +121,7 @@ namespace samcodesadmob
 		GADInterstitial* interstitial = [instance getInterstitialForAdUnit:nsLocation];
 		
 		if([interstitial isReady]) {
-			[ad presentFromRootViewController:[[[UIApplication sharedApplication] keyWindow] rootViewController]];
+			[interstitial presentFromRootViewController:[[[UIApplication sharedApplication] keyWindow] rootViewController]];
 		} else {
 			// TODO serve cache request and then check if ready with a timer
 		}
