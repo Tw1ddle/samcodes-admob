@@ -6,43 +6,56 @@
 #include "SamcodesAdMob.h"
 
 #import "GADInterstitial.h"
-extern "C" {
-    #import "GADBannerView.h"
+#import "GADBannerView.h"
+
+@interface AdMobImplementation : NSObject <GADInterstitialDelegate, GADBannerViewDelegate> {
 }
 
-@interface InterstitialListener : NSObject <GADInterstitialDelegate> {
-	@public
-	GADInterstitial *ad;
+@implementation AdMobImplementation
+
+- (void)interstitialDidReceiveAd:(GADInterstitial *)ad {
 }
 
-- (void)showInterstitial:(NSString*)location;
-
-@implementation InterstitialListener
-
-- (id)initWithID:(const char*)ID {
-	self = [super init];
-	ad = [[GADInterstitial alloc] init];
-	ad.delegate = self;
-	ad.adUnitID = [[NSString alloc] initWithUTF8String:ID];
-	GADRequest *request = [GADRequest request];
-	request.testDevices = @[ GAD_SIMULATOR_ID ];
-	[ad performSelector:@selector(loadRequest:) withObject:request afterDelay:1];
-	return self;
+- (void)interstitial:(GADInterstitial *)ad didFailToReceiveAdWithError:(GADRequestError *)error {
 }
 
-- (void)showInterstitial:(NSString*)location {
-    if (ad != nil && ad.isReady) {
-        [ad presentFromRootViewController:[[[UIApplication sharedApplication] keyWindow] rootViewController]];
-    }
+- (void)interstitialWillPresentScreen:(GADInterstitial *)ad {
+}
+
+- (void)interstitialWillDismissScreen:(GADInterstitial *)ad {
+}
+
+- (void)interstitialDidDismissScreen:(GADInterstitial *)ad {
+}
+
+- (void)interstitialWillLeaveApplication:(GADInterstitial *)ad {
+}
+
+- (void)adViewDidReceiveAd:(GADBannerView *)view {
+}
+
+- (void)adView:(GADBannerView *)view didFailToReceiveAdWithError:(GADRequestError *)error {
+}
+
+- (void)adViewWillPresentScreen:(GADBannerView *)adView {
+}
+
+- (void)adViewWillDismissScreen:(GADBannerView *)adView {
+}
+
+- (void)adViewDidDismissScreen:(GADBannerView *)adView {
+}
+
+- (void)adViewWillLeaveApplication:(GADBannerView *)adView {
 }
 
 @end
 
 extern "C" void sendAdMobEvent(const char* type, const char* location);
 
-namespace samcodeschartboost
+namespace samcodesadmob
 {	
-    void initAdMob(const char *testDeviceHash)
+    void initAdMob(const char* testDeviceHash)
     {
 		// TODO
     }
