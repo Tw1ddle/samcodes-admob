@@ -8,9 +8,11 @@
 #import "GADInterstitial.h"
 #import "GADBannerView.h"
 
+extern "C" void sendAdMobEvent(const char* type, const char* location);
+
 @interface AdMobImplementation : NSObject <GADInterstitialDelegate, GADBannerViewDelegate> {
-	NSMutableDictionary* bannerDictionary;
-	NSMutableDictionary* interstitialDictionary;
+	static NSMutableDictionary* bannerDictionary;
+	static NSMutableDictionary* interstitialDictionary;
 }
 
 -(GADInterstitial*)getInterstitialForAdUnit:(NSString*)location;
