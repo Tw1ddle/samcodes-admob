@@ -12,8 +12,12 @@ import flash.Lib;
 @:allow(extension.AdMob) class AdMob
 {
 	// Must be called before use of any other methods in this class
-	public static function init():Void {
+	public static function init(?testDeviceIdHash:String):Void {
 		AdMob.initBindings();
+		
+		#if ios
+		init_admob(testDeviceIdHash);
+		#end
 	}
 	
 	public static function setListener(listener:AdMobListener):Void {
@@ -52,6 +56,12 @@ import flash.Lib;
 		#end
 		#if ios
 		var ndllName:String = "samcodesadmob";
+		#end
+		
+		#if ios
+		if (init_admob == null) {
+			init_admob = Lib.load(ndllName, "init_admob", 1);
+		}
 		#end
 		
 		if (set_listener == null) {
@@ -104,6 +114,9 @@ import flash.Lib;
 		}
 	}
 	
+	#if ios
+	private static var init_admob:Dynamic = null;
+	#end
 	private static var set_listener:Dynamic = null;
 	private static var show_interstitial:Dynamic = null;
 	private static var cache_interstitial:Dynamic = null;
