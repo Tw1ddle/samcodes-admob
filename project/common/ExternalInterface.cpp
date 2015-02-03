@@ -24,7 +24,7 @@ DEFINE_PRIM(set_listener, 1);
 
 static value init_admob(value hashed_device_id)
 {
-    initAdMob(val_string(id), val_string(signature));
+    initAdMob(val_string(hashed_device_id));
     return alloc_null();
 }
 DEFINE_PRIM(init_admob, 1);
