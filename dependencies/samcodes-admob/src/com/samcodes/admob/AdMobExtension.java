@@ -13,7 +13,11 @@ import android.widget.Button;
 import android.widget.ImageView;
 import org.haxe.extension.Extension;
 import org.haxe.lime.HaxeObject;
-import java.util.HashMap; 
+import java.util.HashMap;
+import java.util.Timer;
+import java.util.TimerTask;
+import java.util.concurrent.Semaphore;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 import com.google.android.gms.ads.*;
 
@@ -88,26 +92,28 @@ public class AdMobExtension extends Extension
 		super.onDestroy();
 	}
 	
-	public static void showBanner(String id) {
+	public static void showBanner(final String id) {		
 		final AdView view = getBannerViewForUnitId(id);
 		
 		if(view != null) {
 			mainActivity.runOnUiThread(new Runnable() {
 				public void run() {
 					// TODO add banner view to view hierarchy?
+					Log.d(TAG, "Showing banner with id " + id);
 					view.setVisibility(View.VISIBLE);
 				}
 			});
 		}
 	}
 	
-	public static void hideBanner(String id) {
+	public static void hideBanner(final String id) {
 		final AdView view = getBannerViewForUnitId(id);
 		
 		if(view != null) {
 			mainActivity.runOnUiThread(new Runnable() {
 				public void run() {
 					// TODO remove banner view from view hierarchy?
+					Log.d(TAG, "Hiding banner with id " + id);
 					view.setVisibility(View.INVISIBLE);
 				}
 			});
@@ -115,16 +121,32 @@ public class AdMobExtension extends Extension
 	}
 	
 	public static boolean hasCachedInterstitial(String id) {
-		InterstitialAd ad = getInterstitialForUnitId(id);
+		final InterstitialAd ad = getInterstitialForUnitId(id);
 		
 		if(ad == null) {
 			return false;
 		}
 		
-		return ad.isLoaded();
+		final Semaphore mutex = new Semaphore(0);
+		final AtomicBoolean isLoaded = new AtomicBoolean();
+		
+		mainActivity.runOnUiThread(new Runnable() {
+			public void run() {
+				isLoaded.set(ad.isLoaded());
+				mutex.release();
+			}
+		});
+		
+		try {
+			mutex.acquire();
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		}
+		
+		return isLoaded.get();
 	}
 	
-	public static void cacheInterstitial(String id) {
+	public static void cacheInterstitial(final String id) {
 		final InterstitialAd ad = getInterstitialForUnitId(id);
 		
 		if(ad != null) {
@@ -142,56 +164,104 @@ public class AdMobExtension extends Extension
 						.addTestDevice(AdRequest.DEVICE_ID_EMULATOR)
 						.build();
 					}
-				
+					
+					if(ad.getAdListener() == null) {
+						ad.setAdListener(new InterstitialListener(id));
+					} else if(ad.getAdListener().getClass().equals(InterstitialListener.class) == false) {
+						ad.setAdListener(new InterstitialListener(id));
+					}
+					
+					Log.d(TAG, "Caching interstitial with id " + id);
 					ad.loadAd(request);
 				}
 			});
 		}
 	}
 	
-	public static void showInterstitial(String id) {
+	public static void showInterstitial(final String id) {
 		final InterstitialAd ad = getInterstitialForUnitId(id);
 		
 		if(ad != null) {
-			mainActivity.runOnUiThread(new Runnable() {
-				public void run() {
-					ad.show();
-				}
-			});
+			if(hasCachedInterstitial(id)) {
+				mainActivity.runOnUiThread(new Runnable() {
+					public void run() {
+						Log.d(TAG, "Preparing to show interstitial");
+						
+						if(ad.getAdListener() == null) {
+							ad.setAdListener(new InterstitialListener(id));
+						} else if(ad.getAdListener().getClass().equals(InterstitialListener.class) == false) {
+							ad.setAdListener(new InterstitialListener(id));
+						}
+						
+						Log.d(TAG, "Showing interstitial with ad unit id " + ad.getAdUnitId());
+						ad.show();
+					}
+				});
+			} else {
+				Log.w(TAG, "Attempted to show interstitial that had not been cached. Sending another cache request instead, will show interstitial once it has cached (timeout 1 minute)");
+				Log.w(TAG, "Note this implies that if this interstitial is cached in the near future it will shown");
+				cacheInterstitial(id);
+				
+				final Timer timer = new Timer();
+				timer.schedule(new TimerTask() {
+					@Override
+					public void run() {
+						if(hasCachedInterstitial(id)) {
+							timer.cancel();
+							
+							mainActivity.runOnUiThread(new Runnable() {
+								public void run() {
+									Log.d(TAG, "Preparing to show interstitial");
+									
+									if(ad.getAdListener() == null) {
+										ad.setAdListener(new InterstitialListener(id));
+									} else if(ad.getAdListener().getClass().equals(InterstitialListener.class) == false) {
+										ad.setAdListener(new InterstitialListener(id));
+									}
+									
+									Log.d(TAG, "Showing interstitial with ad unit id " + ad.getAdUnitId());
+									ad.show();
+								}
+							});
+						}
+					}
+				}, 30, 2000);
+			}
 		}
 	}
 	
 	private static InterstitialAd addInterstitialForUnitId(final String id) {
 		if(unitIdToInterstitial.containsKey(id)) {
-			Log.e(TAG, "This interstitial is already in the ad unit id->interstitial map, replacing it...");
+			Log.e(TAG, "This interstitial is already in the ad unit id->interstitial map...");
 		}
 		
 		final InterstitialAd ad = new InterstitialAd(mainActivity);
 		
-		mainActivity.runOnUiThread(new Runnable() {
-			public void run() {
-				ad.setAdUnitId(id);
-				ad.setAdListener(new InterstitialListener(id));
-			}
-		});
+		if(ad.getAdUnitId() == null) {
+			ad.setAdUnitId(id);
+		} else if(ad.getAdUnitId().equals(id) == false) {
+			ad.setAdUnitId(id);
+		}
+		
+		unitIdToInterstitial.put(id, ad);
 		
 		return ad;
 	}
 	
 	private static AdView addBannerViewForUnitId(final String id) {
 		if(unitIdToBannerView.containsKey(id)) {
-			Log.e(TAG, "This banner is already in the ad unit id->bannerview map, replacing it...");
+			Log.e(TAG, "This banner is already in the ad unit id->bannerview map...");
 		}
 		
 		final AdView ad = new AdView(mainActivity);
 		
-		mainActivity.runOnUiThread(new Runnable() {
-			public void run() {
-				ad.setAdUnitId(id);
-				//ad.setAdSize(size); // TODO need to set view parameters
-				ad.setAdListener(new BannerListener(id));
-			}
-		});
+		if(ad.getAdUnitId() == null) {
+			ad.setAdUnitId(id);
+			Log.d(TAG, "Ad unit id was null, setting to " + id);
+		} else if(ad.getAdUnitId().equals(id) == false) {
+			ad.setAdUnitId(id);
+			Log.d(TAG, "Ad unit id was equal to " + ad.getAdUnitId() + " setting it to " + id);
+		}
 		
 		unitIdToBannerView.put(id, ad);
 		

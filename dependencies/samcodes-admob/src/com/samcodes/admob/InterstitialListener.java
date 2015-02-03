@@ -20,7 +20,7 @@ import com.google.android.gms.ads.*;
 class InterstitialListener extends AdListener {
 	private static String TAG = "InterstitialListener";
 	
-	private String id;
+	public String id;
 	
 	public InterstitialListener(String id) {
 		this.id = id;

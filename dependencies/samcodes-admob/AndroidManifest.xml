@@ -16,7 +16,11 @@
 		/>
 	</application>
 	
+	<!-- Used to request ads. -->
     <uses-permission android:name="android.permission.INTERNET"/>
+	<!-- Used to avoid sending an ad request if there is no connectivity. -->
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
+	<!-- Required permissions for video ads. -->
+	<uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
 	
 </manifest>
