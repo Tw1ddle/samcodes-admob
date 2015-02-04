@@ -28,7 +28,7 @@ static NSMutableArray* testDevices;
    static AdMobImplementation* sharedInstance = nil;
    static dispatch_once_t onceToken;
    dispatch_once(&onceToken, ^{
-      sharedInstance = [[self alloc] init];	  
+      sharedInstance = [[AdMobImplementation alloc] init];	  
 	  bannerDictionary = [[NSMutableDictionary alloc] init];
 	  interstitialDictionary = [[NSMutableDictionary alloc] init];
 	  testDevices = [[NSMutableArray alloc] init];
@@ -41,15 +41,18 @@ static NSMutableArray* testDevices;
 -(GADInterstitial*)getInterstitialForAdUnit:(NSString*)location {
 	GADInterstitial* interstitial = (GADInterstitial*)([interstitialDictionary objectForKey:location]);
 	
-	if(interstitial == nil) {
-		interstitial = [[GADInterstitial alloc] init];
-		interstitial.delegate = self;
-		interstitial.adUnitID = location;
+	if(interstitial != nil && !interstitial.hasBeenUsed) {
+		return interstitial;
+	} else {
+		interstitial.delegate = nil;
 		
-		[interstitialDictionary setObject:interstitial forKey:location];
+		GADInterstitial* new_interstitial = [[GADInterstitial alloc] init];
+		new_interstitial.delegate = self;
+		new_interstitial.adUnitID = location;
+		[interstitialDictionary setObject:new_interstitial forKey:location];
+		
+		return new_interstitial;
 	}
-	
-	return interstitial;
 }
 
 -(GADBannerView*)getBannerForAdUnit:(NSString*)location {
@@ -113,10 +116,7 @@ static NSMutableArray* testDevices;
 	sendAdMobEvent("onBannerFailedToLoad", [adView.adUnitID cStringUsingEncoding:[NSString defaultCStringEncoding]]);
 }
 
-- (void)adViewWillPresentScreen:(GADBannerView *)adView {
-	[adView.rootViewController.view addSubview:adView];
-	adView.hidden = false;
-	
+- (void)adViewWillPresentScreen:(GADBannerView *)adView {	
 	sendAdMobEvent("onBannerOpened", [adView.adUnitID cStringUsingEncoding:[NSString defaultCStringEncoding]]);
 }
 
@@ -154,7 +154,8 @@ namespace samcodesadmob
 		if([interstitial isReady]) {
 			[interstitial presentFromRootViewController:[[[UIApplication sharedApplication] keyWindow] rootViewController]];
 		} else {
-			// TODO serve cache request and then check if ready with a timer
+			// TODO could add timer that repeatedly request ad caching here, but it is better to make users cache their ads first...
+			NSLog(@"Not showing ad - make sure it has been cached first");
 		}
     }
 	
@@ -184,11 +185,14 @@ namespace samcodesadmob
 		AdMobImplementation *instance = [AdMobImplementation sharedInstance];
 		GADBannerView* banner = [instance getBannerForAdUnit:nsLocation];
 		
+		[adView.rootViewController.view addSubview:adView];
+		adView.hidden = false;
+		
+		banner.hidden = false;
+		
 		GADRequest *request = [GADRequest request];
 		request.testDevices = testDevices;
 		[banner loadRequest:request];
-		
-		banner.hidden = false;
     }
 	
     void hideBanner(const char* location)

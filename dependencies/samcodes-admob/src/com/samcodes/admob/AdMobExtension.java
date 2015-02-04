@@ -225,6 +225,12 @@ public class AdMobExtension extends Extension
 					}
 				});
 			} else {
+				Log.d(TAG, "Not showing interstitial because it hasn't cached yet");
+			}
+			
+			// Disabling this because it's better to discourage this type of use. Manage caching manually and use your own listener to show ads when they are ready.
+			/*
+			else {
 				Log.w(TAG, "Attempted to show interstitial that had not been cached. Sending a cache request now. Will show interstitial immediately once it has cached (timeout = 1 minute)");
 				Log.w(TAG, "If this interstitial gets cached from this or a future cache request, it will shown immediately. This will be annoying for your users. Avoid this by guarding with hasCachedInterstitial from Haxe.");
 				cacheInterstitial(id);
@@ -254,6 +260,7 @@ public class AdMobExtension extends Extension
 					}
 				}, 30, 2000);
 			}
+			*/
 		}
 	}
 	
