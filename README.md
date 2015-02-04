@@ -44,7 +44,8 @@ AdMob.init("YOUR_HASHED_TEST_DEVICE_ID");
 ```haxe
 // Basic usage
 AdMob.init(); // Must be called first. You may specify a test device id on iOS here.
-AdMob.setListener(new AdSimpleAdMobListener(listener)); // Attach an extended AdMobListener to handle/respond to SDK events.
+AdMob.setBannerPosition(1); // All banners will appear at top of screen. 0 = bottom/1 = top.
+AdMob.setListener(new AdSimpleAdMobListener(listener)); // Attach an extended AdMobListener to handle/respond to SDK events (this is good for showing banners as soon as they load etc...)
 
 AdMob.cacheInterstitial("my_ad_unit_id"); // Cache interstitial with the given id from your AdMob dashboard.
 
@@ -57,8 +58,11 @@ if(AdMob.hasCachedInterstitial("my_ad_unit_id") {
 	AdMob.showInterstitial("my_ad_unit_id");
 }
 
-AdMob.refreshBanner("my_ad_unit_id"); 
-AdMob.showBanner("my_ad_unit_id"); // Shows a banner
+AdMob.refreshBanner("my_ad_unit_id");
+
+// A bit later...
+
+AdMob.showBanner("my_ad_unit_id"); // Shows an invisible banner
 AdMob.hideBanner("my_ad_unit_id"); // Hides a visible banner
 ```
 
