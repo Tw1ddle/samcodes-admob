@@ -72,15 +72,17 @@ static int bannerPosition;
 		banner.delegate = self;
 		banner.rootViewController = [[[UIApplication sharedApplication] keyWindow] rootViewController];
 		
-		if(bannerPosition == 0) {
-			CGRect frame = banner.frame;
-			frame.origin.y = banner.rootViewController.view.bounds.size.height - frame.size.height;
-			banner.frame = frame;
-		} else if(bannerPosition == 1) {
-			// Banner ads default to top on iOS
-		}
-		
 		[bannerDictionary setObject:banner forKey:location];
+	}
+	
+	if(bannerPosition == 0) {
+		CGRect frame = banner.frame;
+		frame.origin.y = banner.rootViewController.view.bounds.size.height - frame.size.height;
+		banner.frame = frame;
+	} else if(bannerPosition == 1) {
+		CGRect frame = banner.frame;
+		frame.origin.y = 0;
+		banner.frame = frame;
 	}
 	
 	return banner;
