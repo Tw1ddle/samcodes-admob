@@ -139,7 +139,7 @@ namespace samcodesadmob
 {
     void initAdMob(const char* testDeviceHash)
     {
-		if(testDeviceHash != null) {
+		if(testDeviceHash != nil) {
 			NSString *nsTestDeviceHash = [[NSString alloc] initWithUTF8String:testDeviceHash];
 			[testDevices addObject:nsTestDeviceHash];
 		}
@@ -185,9 +185,7 @@ namespace samcodesadmob
 		AdMobImplementation *instance = [AdMobImplementation sharedInstance];
 		GADBannerView* banner = [instance getBannerForAdUnit:nsLocation];
 		
-		[adView.rootViewController.view addSubview:adView];
-		adView.hidden = false;
-		
+        [banner.rootViewController.view addSubview:banner];
 		banner.hidden = false;
 		
 		GADRequest *request = [GADRequest request];
