@@ -125,8 +125,8 @@ public class AdMobExtension extends Extension
 					Log.d(TAG, "Preparing to show banner with id " + id);
 					
 					view.loadAd(request);
-				});
-			}
+				}
+			});
 		}
 	}
 	
