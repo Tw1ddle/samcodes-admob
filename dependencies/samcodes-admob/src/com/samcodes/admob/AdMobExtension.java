@@ -28,11 +28,10 @@ public class AdMobExtension extends Extension
 	private static String TAG = "AdMobExtension";
 	private static String testDeviceId = "::ENV_AdmobTestDeviceId::";
 	private static RelativeLayout bannerLayout = null;
-	private static int gravity = Gravity.BOTTOM | Gravity.CENTER_HORIZONTAL;
 	public static RelativeLayout getLayout() {
 		if(bannerLayout == null) {
 			bannerLayout = new RelativeLayout(mainActivity);
-			bannerLayout.setGravity(gravity);
+			bannerLayout.setGravity(Gravity.BOTTOM | Gravity.CENTER_HORIZONTAL);
 			RelativeLayout.LayoutParams p = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.MATCH_PARENT, RelativeLayout.LayoutParams.MATCH_PARENT);					
 			mainActivity.addContentView(bannerLayout, p);
 			bannerLayout.bringToFront();
@@ -95,6 +94,20 @@ public class AdMobExtension extends Extension
 		}
 		
 		super.onDestroy();
+	}
+	
+	public static void setBannerPosition(final int position) {
+		mainActivity.runOnUiThread(new Runnable() {
+			public void run() {
+				if(position == 0) {
+					Log.d(TAG, "Setting banner position to bottom center");
+					AdMobExtension.getLayout().setGravity(Gravity.BOTTOM | Gravity.CENTER_HORIZONTAL);
+				} else if(position == 1) {
+					Log.d(TAG, "Setting banner position to top center");
+					AdMobExtension.getLayout().setGravity(Gravity.TOP | Gravity.CENTER_HORIZONTAL);
+				}
+			}
+		});
 	}
 	
 	public static void refreshBanner(final String id) {

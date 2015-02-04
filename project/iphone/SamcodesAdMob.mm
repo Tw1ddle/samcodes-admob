@@ -23,6 +23,7 @@ extern "C" void sendAdMobEvent(const char* type, const char* location);
 static NSMutableDictionary* bannerDictionary;
 static NSMutableDictionary* interstitialDictionary;
 static NSMutableArray* testDevices;
+static int bannerPosition;
 
 + (AdMobImplementation*)sharedInstance {
    static AdMobImplementation* sharedInstance = nil;
@@ -32,6 +33,7 @@ static NSMutableArray* testDevices;
 	  bannerDictionary = [[NSMutableDictionary alloc] init];
 	  interstitialDictionary = [[NSMutableDictionary alloc] init];
 	  testDevices = [[NSMutableArray alloc] init];
+	  bannerPosition = 0;
 	  [testDevices addObject:GAD_SIMULATOR_ID];
    });
 
@@ -69,9 +71,14 @@ static NSMutableArray* testDevices;
 		banner.adUnitID = location;
 		banner.delegate = self;
 		banner.rootViewController = [[[UIApplication sharedApplication] keyWindow] rootViewController];
-		CGRect frame = banner.frame;
-		frame.origin.y = banner.rootViewController.view.bounds.size.height - frame.size.height;
-		banner.frame = frame;
+		
+		if(bannerPosition == 0) {
+			CGRect frame = banner.frame;
+			frame.origin.y = banner.rootViewController.view.bounds.size.height - frame.size.height;
+			banner.frame = frame;
+		} else if(bannerPosition == 1) {
+			// Banner ads default to top on iOS
+		}
 		
 		[bannerDictionary setObject:banner forKey:location];
 	}
@@ -169,6 +176,11 @@ namespace samcodesadmob
 		request.testDevices = testDevices;
 		[interstitial loadRequest:request];
     }
+	
+	void setBannerPosition(int position)
+	{
+		bannerPosition = position;
+	}
 	
     bool hasCachedInterstitial(const char* location)
     {

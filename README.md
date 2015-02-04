@@ -7,12 +7,13 @@ Unofficial AdMob banner and interstitial ads support for iOS and Android Haxe/Op
 Supports:
 * Caching and showing interstitial ads.
 * Showing and hiding banner ads.
-* Multiple ads and ad units.
+* Multiple ad units.
 * Customizable listener for reacting to SDK events.
+* Banners either at top or bottom of screen.
 
 Doesn't support:
-* Customizable banner ad locations or sizes.
 * Displaying more than one banner at a time.
+* Complex customization for banner size or position.
 * IAP functionality.
 * DoubleClick ads or mediation.
 

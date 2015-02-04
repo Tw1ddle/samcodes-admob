@@ -9,6 +9,7 @@ import flash.Lib;
 #end
 
 #if (android || ios)
+
 @:allow(extension.AdMob) class AdMob
 {
 	// Must be called before use of any other methods in this class
@@ -40,6 +41,10 @@ import flash.Lib;
 
 	public static function hasCachedInterstitial(id:String):Bool {
 		return has_cached_interstitial(id);
+	}
+	
+	public static function setBannerPosition(position:Int):Void {
+		set_banner_position(position);
 	}
 	
 	public static function refreshBanner(id:String):Void {
@@ -100,6 +105,14 @@ import flash.Lib;
 			has_cached_interstitial = Lib.load(ndllName, "has_cached_interstitial", 1);
 			#end
 		}
+		if (set_banner_position == null) {
+			#if android
+			set_banner_position = JNI.createStaticMethod(packageName, "setBannerPosition", "(I)V");
+			#end
+			#if ios
+			set_banner_position = Lib.load(ndllName, "set_banner_position", 1);
+			#end
+		}
 		if (refresh_banner == null) {
 			#if android
 			refresh_banner = JNI.createStaticMethod(packageName, "refreshBanner", "(Ljava/lang/String;)V");
@@ -133,6 +146,7 @@ import flash.Lib;
 	private static var show_interstitial:Dynamic = null;
 	private static var cache_interstitial:Dynamic = null;
 	private static var has_cached_interstitial:Dynamic = null;
+	private static var set_banner_position:Dynamic = null;
 	private static var refresh_banner:Dynamic = null;
 	private static var show_banner:Dynamic = null;
 	private static var hide_banner:Dynamic = null;
