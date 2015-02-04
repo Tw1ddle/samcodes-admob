@@ -59,11 +59,12 @@ AdMob.hideBanner(); // Hides a visible banner
 
 ### Example ###
 
-For a full example see the demo app: https://github.com/Tw1ddle/samcodes-chartboost-demo
+For a full example see the demo app: https://github.com/Tw1ddle/samcodes-ads-demo
 
-TODO
-![Screenshot of demo app](https://github.com/Tw1ddle/samcodes-chartboost-demo/blob/master/screenshots/main.png?raw=true "Demo app")
+![Screenshot of demo app](https://github.com/Tw1ddle/samcodes-ads-demo/blob/master/screenshots/admob-banner.png?raw=true "Demo app")
 
+![Screenshot of demo app](https://github.com/Tw1ddle/samcodes-ads-demo/blob/master/screenshots/admob-interstitial.png?raw=true "Demo app")
+	
 ### Notes ###
 
 For running on iOS, you need to drag your ```libAdMobAds.a``` into the "link binaries with libraries" section under the "build phases" tab in Xcode.
