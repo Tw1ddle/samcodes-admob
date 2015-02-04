@@ -139,8 +139,10 @@ namespace samcodesadmob
 {
     void initAdMob(const char* testDeviceHash)
     {
-		NSString *nsTestDeviceHash = [[NSString alloc] initWithUTF8String:testDeviceHash];
-		[testDevices addObject:nsTestDeviceHash];
+		if(testDeviceHash != null) {
+			NSString *nsTestDeviceHash = [[NSString alloc] initWithUTF8String:testDeviceHash];
+			[testDevices addObject:nsTestDeviceHash];
+		}
     }
 	
 	void showInterstitial(const char* location)
