@@ -75,15 +75,23 @@ static int bannerPosition;
 		[bannerDictionary setObject:banner forKey:location];
 	}
 	
+	CGRect frame = banner.frame;
+	int autoresizingMask = 0;
+	
 	if(bannerPosition == 0) {
-		CGRect frame = banner.frame;
 		frame.origin.y = banner.rootViewController.view.bounds.size.height - frame.size.height;
 		banner.frame = frame;
+		autoresizingMask += UIViewAutoresizingFlexibleLeftMargin | UIViewAutoresizingFlexibleRightMargin;
+		autoresizingMask += UIViewAutoresizingFlexibleTopMargin;
 	} else if(bannerPosition == 1) {
-		CGRect frame = banner.frame;
 		frame.origin.y = 0;
 		banner.frame = frame;
+		autoresizingMask += UIViewAutoresizingFlexibleLeftMargin | UIViewAutoresizingFlexibleRightMargin;
+		autoresizingMask += UIViewAutoresizingFlexibleBottomMargin;
 	}
+	
+	banner.frame = frame;
+	banner.autoresizingMask = autoresizingMask;
 	
 	return banner;
 }
