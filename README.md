@@ -35,14 +35,14 @@ For Android enter a device id if you want to use test ads on one:
 <setenv name="AdmobTestDeviceId" value="YOUR_HASHED_TEST_DEVICE_ID" />
 ```
 
-For iOS you must specify a test device id in the AdMob.init() call in Haxe code:
+For iOS you may specify a test device id in the AdMob.init() call in Haxe code:
 ```haxe
-TODO
+AdMob.init("YOUR_HASHED_TEST_DEVICE_ID");
 ```
 
 ```haxe
 // Basic usage
-AdMob.init();
+AdMob.init(); // Must be called first. You may specify a test device id on iOS here.
 AdMob.setListener(new AdSimpleAdMobListener(listener)); // Attach an extended AdMobListener to handle/respond to SDK events.
 
 AdMob.cacheInterstitial("my_ad_unit_id"); // Cache interstitial with the given id from your AdMob dashboard.
