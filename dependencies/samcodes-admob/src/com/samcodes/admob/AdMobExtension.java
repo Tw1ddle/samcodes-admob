@@ -31,7 +31,7 @@ public class AdMobExtension extends Extension
 	public static RelativeLayout getLayout() {
 		if(bannerLayout == null) {
 			bannerLayout = new RelativeLayout(mainActivity);
-			bannerLayout.setGravity(Gravity.BOTTOM | Gravity.CENTER_HORIZONTAL);
+			bannerLayout.setGravity(Gravity.TOP | Gravity.CENTER_HORIZONTAL);
 			RelativeLayout.LayoutParams p = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.MATCH_PARENT, RelativeLayout.LayoutParams.MATCH_PARENT);					
 			mainActivity.addContentView(bannerLayout, p);
 			bannerLayout.bringToFront();

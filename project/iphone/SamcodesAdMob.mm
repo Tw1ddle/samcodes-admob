@@ -29,11 +29,11 @@ static int bannerPosition;
    static AdMobImplementation* sharedInstance = nil;
    static dispatch_once_t onceToken;
    dispatch_once(&onceToken, ^{
+	  bannerPosition = 1; // Defaults to banners on top of screen
       sharedInstance = [[AdMobImplementation alloc] init];	  
 	  bannerDictionary = [[NSMutableDictionary alloc] init];
 	  interstitialDictionary = [[NSMutableDictionary alloc] init];
 	  testDevices = [[NSMutableArray alloc] init];
-	  bannerPosition = 0;
 	  [testDevices addObject:GAD_SIMULATOR_ID];
    });
 
@@ -71,7 +71,6 @@ static int bannerPosition;
 		banner.adUnitID = location;
 		banner.delegate = self;
 		banner.rootViewController = [[[UIApplication sharedApplication] keyWindow] rootViewController];
-		
 		[bannerDictionary setObject:banner forKey:location];
 	}
 	
@@ -80,12 +79,10 @@ static int bannerPosition;
 	
 	if(bannerPosition == 0) {
 		frame.origin.y = banner.rootViewController.view.bounds.size.height - frame.size.height;
-		banner.frame = frame;
 		autoresizingMask += UIViewAutoresizingFlexibleLeftMargin | UIViewAutoresizingFlexibleRightMargin;
 		autoresizingMask += UIViewAutoresizingFlexibleTopMargin;
 	} else if(bannerPosition == 1) {
 		frame.origin.y = 0;
-		banner.frame = frame;
 		autoresizingMask += UIViewAutoresizingFlexibleLeftMargin | UIViewAutoresizingFlexibleRightMargin;
 		autoresizingMask += UIViewAutoresizingFlexibleBottomMargin;
 	}
