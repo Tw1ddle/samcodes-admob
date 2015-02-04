@@ -42,7 +42,7 @@ class BannerListener extends AdListener {
 		Log.d(TAG, "Hiding banner with id " + id);
 		AdView view = AdMobExtension.getBannerViewForUnitId(id);
 		view.setVisibility(View.INVISIBLE);
-		AdMobExtension.getLayout().removeAllViews();
+		AdMobExtension.getLayout().removeView(view);
 		AdMobExtension.getLayout().bringToFront();
 		
 		AdMobExtension.callHaxe("onBannerFailedToLoad", new Object[] {id});
@@ -75,13 +75,6 @@ class BannerListener extends AdListener {
 	@Override
 	public void onAdLoaded() {
 		Log.d(TAG, "onBannerLoaded");
-		
-		Log.d(TAG, "Showing banner with id " + id);
-		AdView view = AdMobExtension.getBannerViewForUnitId(id);
-		view.setVisibility(View.VISIBLE);
-		AdMobExtension.getLayout().removeAllViews();
-		AdMobExtension.getLayout().addView(view);
-		AdMobExtension.getLayout().bringToFront();
 		
 		AdMobExtension.callHaxe("onBannerLoaded", new Object[] {id});
 	}

@@ -179,18 +179,28 @@ namespace samcodesadmob
 		return [interstitial isReady];
     }
 	
+	void refreshBanner(const char* location)
+	{
+		NSString *nsLocation = [[NSString alloc] initWithUTF8String:location];
+		AdMobImplementation *instance = [AdMobImplementation sharedInstance];
+		GADBannerView* banner = [instance getBannerForAdUnit:nsLocation];
+		
+		GADRequest *request = [GADRequest request];
+		request.testDevices = testDevices;
+		[banner loadRequest:request];
+	}
+	
     void showBanner(const char* location)
     {
         NSString *nsLocation = [[NSString alloc] initWithUTF8String:location];
 		AdMobImplementation *instance = [AdMobImplementation sharedInstance];
 		GADBannerView* banner = [instance getBannerForAdUnit:nsLocation];
 		
-        [banner.rootViewController.view addSubview:banner];
+		if(!banner.superview) {
+			[banner.rootViewController.view addSubview:banner];
+		}
+        
 		banner.hidden = false;
-		
-		GADRequest *request = [GADRequest request];
-		request.testDevices = testDevices;
-		[banner loadRequest:request];
     }
 	
     void hideBanner(const char* location)

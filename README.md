@@ -50,11 +50,15 @@ AdMob.cacheInterstitial("my_ad_unit_id"); // Cache interstitial with the given i
 // A bit later...
 
 if(AdMob.hasCachedInterstitial("my_ad_unit_id") {
-	AdMob.showInterstitial("my_ad_unit_id"); // Shows an interstitial with the given id. If this is called and the ad isn't cached, then it will issue a cache request and show if as soon as it caches.
+	// Shows an interstitial with the given id.
+	// If this is called and the ad isn't cached, then it may display later or not at all depending on the ads SDK.
+	// Generally you want to cache interstitial ads well in advance of showing them.
+	AdMob.showInterstitial("my_ad_unit_id");
 }
 
-AdMob.showBanner(); // Shows a banner
-AdMob.hideBanner(); // Hides a visible banner
+AdMob.refreshBanner("my_ad_unit_id"); 
+AdMob.showBanner("my_ad_unit_id"); // Shows a banner
+AdMob.hideBanner("my_ad_unit_id"); // Hides a visible banner
 ```
 
 ### Example ###

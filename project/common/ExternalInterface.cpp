@@ -49,6 +49,13 @@ static value has_cached_interstitial(value location)
 }
 DEFINE_PRIM(has_cached_interstitial, 1);
 
+static value refresh_banner(value location)
+{
+	refreshBanner(val_string(location));
+	return alloc_null();
+}
+DEFINE_PRIM(refresh_banner, 1);
+
 static value show_banner(value location)
 {
 	showBanner(val_string(location));

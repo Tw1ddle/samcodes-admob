@@ -42,6 +42,10 @@ import flash.Lib;
 		return has_cached_interstitial(id);
 	}
 	
+	public static function refreshBanner(id:String):Void {
+		refresh_banner(id);
+	}
+	
 	public static function showBanner(id:String):Void {
 		show_banner(id);
 	}
@@ -96,6 +100,14 @@ import flash.Lib;
 			has_cached_interstitial = Lib.load(ndllName, "has_cached_interstitial", 1);
 			#end
 		}
+		if (refresh_banner == null) {
+			#if android
+			refresh_banner = JNI.createStaticMethod(packageName, "refreshBanner", "(Ljava/lang/String;)V");
+			#end
+			#if ios
+			refresh_banner = Lib.load(ndllName, "refresh_banner", 1);
+			#end
+		}
 		if (show_banner == null) {
 			#if android
 			show_banner = JNI.createStaticMethod(packageName, "showBanner", "(Ljava/lang/String;)V");
@@ -121,6 +133,7 @@ import flash.Lib;
 	private static var show_interstitial:Dynamic = null;
 	private static var cache_interstitial:Dynamic = null;
 	private static var has_cached_interstitial:Dynamic = null;
+	private static var refresh_banner:Dynamic = null;
 	private static var show_banner:Dynamic = null;
 	private static var hide_banner:Dynamic = null;
 }

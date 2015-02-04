@@ -97,34 +97,47 @@ public class AdMobExtension extends Extension
 		super.onDestroy();
 	}
 	
+	public static void refreshBanner(final String id) {
+		final AdView view = getBannerViewForUnitId(id);
+		
+		if(view != null) {
+			AdRequest request = null;
+			
+			if(testDeviceId != "null") {
+				request = new AdRequest.Builder()
+				.addTestDevice(AdRequest.DEVICE_ID_EMULATOR)
+				.addTestDevice(testDeviceId)
+				.build();
+			} else {
+				request = new AdRequest.Builder()
+				.addTestDevice(AdRequest.DEVICE_ID_EMULATOR)
+				.build();
+			}
+			
+			if(view.getAdListener() == null) {
+				view.setAdListener(new BannerListener(id));
+			} else if(view.getAdListener().getClass().equals(BannerListener.class) == false) {
+				view.setAdListener(new BannerListener(id));
+			}
+			
+			Log.d(TAG, "Preparing to show banner with id " + id);
+			
+			view.loadAd(request);
+		}
+	}
+	
 	public static void showBanner(final String id) {		
 		final AdView view = getBannerViewForUnitId(id);
 		
 		if(view != null) {
 			mainActivity.runOnUiThread(new Runnable() {
 				public void run() {
-					AdRequest request = null;
-					
-					if(testDeviceId != "null") {
-						request = new AdRequest.Builder()
-						.addTestDevice(AdRequest.DEVICE_ID_EMULATOR)
-						.addTestDevice(testDeviceId)
-						.build();
-					} else {
-						request = new AdRequest.Builder()
-						.addTestDevice(AdRequest.DEVICE_ID_EMULATOR)
-						.build();
-					}
-					
-					if(view.getAdListener() == null) {
-						view.setAdListener(new BannerListener(id));
-					} else if(view.getAdListener().getClass().equals(BannerListener.class) == false) {
-						view.setAdListener(new BannerListener(id));
-					}
-					
-					Log.d(TAG, "Preparing to show banner with id " + id);
-					
-					view.loadAd(request);
+					Log.d(TAG, "Showing banner with id " + id);
+					AdView view = AdMobExtension.getBannerViewForUnitId(id);
+					view.setVisibility(View.VISIBLE);
+					AdMobExtension.getLayout().removeAllViews();
+					AdMobExtension.getLayout().addView(view);
+					AdMobExtension.getLayout().bringToFront();
 				}
 			});
 		}
