@@ -7,6 +7,12 @@
 		<dependency name="QuartzCore.framework"/>
 		<dependency name="SystemConfiguration.framework" />
 		<dependency name="AdSupport.framework" />
+        <dependency name="MessageUI.framework" />
+        <dependency name="EventKit.framework" />
+        <dependency name="EventKitUI.framework" />
+        <dependency name="StoreKit.framework" />
+        <dependency name="CoreTelephony.framework" />
+        <dependency name="AVFoundation.framework" />
 	</section>
 	
 	<section if="android">
