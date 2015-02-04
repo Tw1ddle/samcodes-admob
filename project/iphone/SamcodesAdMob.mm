@@ -29,7 +29,6 @@ static int bannerPosition;
    static AdMobImplementation* sharedInstance = nil;
    static dispatch_once_t onceToken;
    dispatch_once(&onceToken, ^{
-	  bannerPosition = 1; // Defaults to banners on top of screen
       sharedInstance = [[AdMobImplementation alloc] init];	  
 	  bannerDictionary = [[NSMutableDictionary alloc] init];
 	  interstitialDictionary = [[NSMutableDictionary alloc] init];
