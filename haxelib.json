@@ -3,8 +3,8 @@
 	"url": "http://samcodes.co.uk/code/",
 	"license": "MIT",
 	"tags": ["admob","ads","interstitials","android","ios"],
-	"description": "Google AdMob ads for Android and iOS",
-	"version": "1.0.0",
+	"description": "Google AdMob banners and interstitials for Android and iOS",
+	"version": "1.0.1",
 	"releasenote": "Initial release",
 	"contributors": ["samcodes"],
 	"dependencies": {"openfl-gps-lib": ""}
