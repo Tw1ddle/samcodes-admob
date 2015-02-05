@@ -6,16 +6,18 @@ Unofficial AdMob banner and interstitial ads support for iOS and Android Haxe/Op
 
 Supports:
 * Caching and showing interstitial ads.
-* Showing and hiding banner ads.
+* Refreshing, showing and hiding banner ads.
 * Multiple ad units.
 * Customizable listener for reacting to SDK events.
 * Banners either at top or bottom of screen.
 
 Doesn't support:
 * Displaying more than one banner at a time.
-* Complex customization for banner size or position.
+* Complex customization for banner sizes or positions.
 * IAP functionality.
 * DoubleClick ads or mediation.
+
+If there is something you would like adding let me know. Pull requests welcomed too!
 
 ### Install ###
 
@@ -43,8 +45,13 @@ AdMob.init("YOUR_HASHED_TEST_DEVICE_ID");
 
 ```haxe
 // Basic usage
-AdMob.init(); // Must be called first. You may specify a test device id on iOS here.
-AdMob.setListener(new AdSimpleAdMobListener(listener)); // Attach an extended AdMobListener to handle/respond to SDK events.
+AdMob.init(); // Must be called first. You may specify a test device id for iOS here.
+
+AdMob.setBannerPosition(1); // All banners will appear at top of screen. 0 = bottom, 1 = top.
+
+// Attach your extended AdMobListener to handle/respond to SDK events 
+// This is the recommended way for showing banners as soon as they load etc.
+AdMob.setListener(new SimpleAdMobListener(listener));
 
 AdMob.cacheInterstitial("my_ad_unit_id"); // Cache interstitial with the given id from your AdMob dashboard.
 
@@ -52,13 +59,16 @@ AdMob.cacheInterstitial("my_ad_unit_id"); // Cache interstitial with the given i
 
 if(AdMob.hasCachedInterstitial("my_ad_unit_id") {
 	// Shows an interstitial with the given id.
-	// If this is called and the ad isn't cached, then it may display later or not at all depending on the ads SDK.
-	// Generally you want to cache interstitial ads well in advance of showing them.
+	// If this is called and the ad isn't cached, then it won't display at all (that's just how the AdMob SDK works).
+	// Generally you should cache interstitial ads well in advance of showing them.
 	AdMob.showInterstitial("my_ad_unit_id");
 }
 
-AdMob.refreshBanner("my_ad_unit_id"); 
-AdMob.showBanner("my_ad_unit_id"); // Shows a banner
+AdMob.refreshBanner("my_ad_unit_id");
+
+// A bit later...
+
+AdMob.showBanner("my_ad_unit_id"); // Shows an invisible banner
 AdMob.hideBanner("my_ad_unit_id"); // Hides a visible banner
 ```
 
@@ -72,7 +82,7 @@ For a full example see the demo app: https://github.com/Tw1ddle/samcodes-ads-dem
 	
 ### Notes ###
 
-For running on iOS, you need to drag your ```libAdMobAds.a``` into the "link binaries with libraries" section under the "build phases" tab in Xcode.
+For running on iOS, you first need to drag your ```libAdMobAds.a``` into the "link binaries with libraries" section under the "build phases" tab in Xcode.
 
 If you need to rebuild the iOS libs for any reason navigate to ```/project``` and run:
 
