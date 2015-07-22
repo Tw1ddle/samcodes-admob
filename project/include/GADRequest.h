@@ -8,12 +8,10 @@
 #import <CoreGraphics/CoreGraphics.h>
 #import <Foundation/Foundation.h>
 
-#import "GADModules.h"
+/// Add this constant to the testDevices property's array to receive test ads on the simulator.
+extern const id kGADSimulatorID;
 
 @protocol GADAdNetworkExtras;
-
-/// Add this constant to the testDevices property's array to receive test ads on the simulator.
-#define GAD_SIMULATOR_ID @"Simulator"
 
 /// Genders to help deliver more relevant ads.
 typedef NS_ENUM(NSInteger, GADGender) {
@@ -25,7 +23,7 @@ typedef NS_ENUM(NSInteger, GADGender) {
 /// Specifies optional parameters for ad requests.
 @interface GADRequest : NSObject<NSCopying>
 
-/// Creates an autoreleased GADRequest.
+/// Returns a default request.
 + (instancetype)request;
 
 #pragma mark Additional Parameters For Ad Networks
@@ -45,9 +43,6 @@ typedef NS_ENUM(NSInteger, GADGender) {
 /// extras type.
 - (void)removeAdNetworkExtrasFor:(Class<GADAdNetworkExtras>)aClass;
 
-/// Extras sent to the mediation server if using mediation. For future use.
-@property(nonatomic, copy) NSDictionary *mediationExtras;
-
 #pragma mark Collecting SDK Information
 
 /// Returns the version of the SDK.
@@ -60,12 +55,11 @@ typedef NS_ENUM(NSInteger, GADGender) {
 
 #pragma mark User Information
 
-/// The user's gender may be used to deliver more relevant ads.
+/// Provide the user's gender to increase ad relevancy.
 @property(nonatomic, assign) GADGender gender;
 
-/// The user's birthday may be used to deliver more relevant ads.
-@property(nonatomic, strong) NSDate *birthday;
-- (void)setBirthdayWithMonth:(NSInteger)m day:(NSInteger)d year:(NSInteger)y;
+/// Provide the user's birthday to increase ad relevancy.
+@property(nonatomic, copy) NSDate *birthday;
 
 /// The user's current location may be used to deliver more relevant ads. However do not use Core
 /// Location just for advertising, make sure it is used for more beneficial reasons as well. It is
@@ -100,27 +94,28 @@ typedef NS_ENUM(NSInteger, GADGender) {
 
 #pragma mark Contextual Information
 
-/// A keyword is a word or phrase describing the current activity of the user such as @"Sports
-/// Scores". Each keyword is an NSString in the NSArray. To clear the keywords set this to nil.
-@property(nonatomic, strong) NSMutableArray *keywords;
-
-/// Convenience method for adding keywords one at a time such as @"Sports Scores" and then
-/// @"Football".
-- (void)addKeyword:(NSString *)keyword;
+/// Array of keyword strings. Keywords are words or phrases describing the current user activity
+/// such as @"Sports Scores" or @"Football". Set this property to nil to clear the keywords.
+@property(nonatomic, copy) NSArray *keywords;
 
 /// URL string for a webpage whose content matches the app content. This webpage content is used for
 /// targeting purposes.
 @property(nonatomic, copy) NSString *contentURL;
 
+#pragma mark - Request Agent Information
+
+/// String that identifies the ad request's origin. Third party libraries that reference the Mobile
+/// Ads SDK should set this property to denote the platform from which the ad request originated.
+/// For example, a third party ad network called "CoolAds network" that is mediating requests to the
+/// Mobile Ads SDK should set this property as "CoolAds".
+@property(nonatomic, copy) NSString *requestAgent;
+
 #pragma mark - Deprecated Methods
 
-/// Accesses the additionalParameters for the "GoogleAdmob" ad network. Please use
-/// -registerAdNetworkExtras: method above and pass an instance of GADAdMobExtras instead.
-@property(nonatomic, copy) NSDictionary *additionalParameters __attribute__((
-    deprecated(" use registerAdNetworkExtras: and pass an instance of GADAdMobExtras.")));
-
-/// This property has been deprecated with the latest SDK releases. Please use testDevices.
-@property(nonatomic, assign, getter=isTesting) BOOL testing
-    __attribute__((deprecated(" use the testDevices property.")));
+/// Provide the user's birthday to increase ad relevancy.
+- (void)setBirthdayWithMonth:(NSInteger)month
+                         day:(NSInteger)day
+                        year:(NSInteger)year
+    __attribute__((deprecated(" use the birthday property.")));
 
 @end

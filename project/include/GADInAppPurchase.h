@@ -8,8 +8,6 @@
 #import <Foundation/Foundation.h>
 #import <StoreKit/StoreKit.h>
 
-#import "GADModules.h"
-
 @protocol GADDefaultInAppPurchaseDelegate;
 
 #pragma mark - Default Purchase Flow

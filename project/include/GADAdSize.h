@@ -4,19 +4,17 @@
 //
 //  Copyright 2012 Google Inc. All rights reserved.
 //
-//  A valid GADAdSize is considered to be one of the predefined GADAdSize
-//  constants or a GADAdSize constructed by GADAdSizeFromCGSize,
-//  GADAdSizeFullWidthPortraitWithHeight, GADAdSizeFullWidthLandscapeWithHeight.
-//
 
 #import <Foundation/Foundation.h>
 #import <UIKit/UIKit.h>
 
-#import "GADModules.h"
-
-/// Do not create a GADAdSize manually. Use one of the kGADAdSize constants.
-/// Treat GADAdSize as an opaque type. Do not access any fields directly. To
-/// obtain a concrete CGSize, use the function CGSizeFromGADAdSize().
+/// A valid GADAdSize is considered to be one of the predefined GADAdSize constants or a GADAdSize
+/// constructed by GADAdSizeFromCGSize, GADAdSizeFullWidthPortraitWithHeight,
+/// GADAdSizeFullWidthLandscapeWithHeight.
+///
+/// Do not create a GADAdSize manually. Use one of the kGADAdSize constants. Treat GADAdSize as an
+/// opaque type. Do not access any fields directly. To obtain a concrete CGSize, use the function
+/// CGSizeFromGADAdSize().
 typedef struct GADAdSize {
   CGSize size;
   NSUInteger flags;
@@ -58,7 +56,7 @@ extern GADAdSize const kGADAdSizeInvalid;
 #pragma mark Custom Sizes
 
 /// Returns a custom GADAdSize for the provided CGSize. Use this only if you require a non-standard
-/// size, otherwise, use one of the standard size constants above.
+/// size. Otherwise, use one of the standard size constants above.
 GADAdSize GADAdSizeFromCGSize(CGSize size);
 
 /// Returns a custom GADAdSize that spans the full width of the application in portrait orientation
@@ -84,6 +82,12 @@ BOOL IsGADAdSizeValid(GADAdSize size);
 
 /// Returns a NSString describing the provided GADAdSize.
 NSString *NSStringFromGADAdSize(GADAdSize size);
+
+/// Returns an NSValue representing the GADAdSize.
+NSValue *NSValueFromGADAdSize(GADAdSize size);
+
+/// Returns a GADAdSize from an NSValue. Returns kGADAdSizeInvalid if the value is not a GADAdSize.
+GADAdSize GADAdSizeFromNSValue(NSValue *value);
 
 #pragma mark Deprecated Macros
 

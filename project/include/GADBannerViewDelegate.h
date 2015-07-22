@@ -7,10 +7,8 @@
 
 #import <Foundation/Foundation.h>
 
-#import "GADModules.h"
-
-@class GADRequestError;
 @class GADBannerView;
+@class GADRequestError;
 
 /// Delegate for receiving state change messages from a GADBannerView such as ad requests
 /// succeeding/failing or when an ad has been clicked.

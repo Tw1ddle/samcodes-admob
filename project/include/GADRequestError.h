@@ -7,8 +7,6 @@
 
 #import <Foundation/Foundation.h>
 
-#import "GADModules.h"
-
 @class GADRequest;
 
 /// Google AdMob Ads error domain.

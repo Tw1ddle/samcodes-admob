@@ -7,36 +7,34 @@
 
 #import <UIKit/UIKit.h>
 
-#import "GADInAppPurchaseDelegate.h"
-#import "GADInterstitialDelegate.h"
-#import "GADModules.h"
-#import "GADRequest.h"
-#import "GADRequestError.h"
+#import <GoogleMobileAds/GADInAppPurchaseDelegate.h>
+#import <GoogleMobileAds/GADInterstitialDelegate.h>
+#import <GoogleMobileAds/GADRequest.h>
+#import <GoogleMobileAds/GADRequestError.h>
 
 /// An interstitial ad. This is a full-screen advertisement shown at natural transition points in
 /// your application such as between game levels or news stories.
-///
-/// Interstitials are shown sparingly. Expect low to no fill.
 @interface GADInterstitial : NSObject
+
+/// Initializes an interstitial with an ad unit created on the AdMob website. Create a new ad unit
+/// for every unique placement of an ad in your application. Set this to the ID assigned for this
+/// placement. Ad units are important for targeting and statistics.
+///
+/// Example AdMob ad unit ID: @"ca-app-pub-0123456789012345/0123456789"
+- (instancetype)initWithAdUnitID:(NSString *)adUnitID NS_DESIGNATED_INITIALIZER;
 
 #pragma mark Pre-Request
 
-/// Required value created in the AdSense website. Create a new ad unit for every unique placement
-/// of an ad in your application. Set this to the ID assigned for this placement. Ad units are
-/// important for targeting and stats.
-/// Example values for different request types:
-///   AdMob: a0123456789ABCD
-///     DFP: /0123/ca-pub-0123456789012345/my-ad-identifier
-/// AdSense: ca-mb-app-pub-0123456789012345/my-ad-identifier
-@property(nonatomic, copy) NSString *adUnitID;
+/// Required value passed in with initWithAdUnitID:.
+@property(nonatomic, readonly, copy) NSString *adUnitID;
 
 /// Optional delegate object that receives state change notifications from this GADInterstitalAd.
-/// Remember to nil the delegate before deallocating this object.
+/// Remember to nil this property before deallocating the delegate.
 @property(nonatomic, weak) id<GADInterstitialDelegate> delegate;
 
 /// Optional delegate object that receives in-app purchase notifications from this ad. Required for
 /// the custom in-app purchase flow, but ignored when using the default in-app purchase flow.
-/// Remember to nil the delegate before deallocating this object.
+/// Remember to nil this property before deallocating the delegate.
 @property(nonatomic, weak) id<GADInAppPurchaseDelegate> inAppPurchaseDelegate;
 
 #pragma mark Making an Ad Request
@@ -52,11 +50,11 @@
 #pragma mark Post-Request
 
 /// Returns YES if the interstitial is ready to be displayed. The delegate's
-/// interstitialAdDidReceiveAd: will be called when this switches from NO to YES.
+/// interstitialAdDidReceiveAd: will be called after this property switches from NO to YES.
 @property(nonatomic, readonly, assign) BOOL isReady;
 
-/// Returns YES if the interstitial object has already shown an interstitial. Note that an
-/// interstitial object can only be used once even with different requests.
+/// Returns YES if this object has already been presented. Interstitial objects can only be used
+/// once even with different requests.
 @property(nonatomic, readonly, assign) BOOL hasBeenUsed;
 
 /// Returns the ad network class name that fetched the current ad. Returns nil while the latest ad
@@ -74,5 +72,14 @@
 /// window to show the interstitial and restored when done. After the interstitial has been removed,
 /// the delegate's interstitialDidDismissScreen: will be called.
 - (void)presentFromRootViewController:(UIViewController *)rootViewController;
+
+#pragma mark Deprecated
+
+/// Deprecated intializer. Use initWithAdUnitID: instead.
+- (instancetype)init DEPRECATED_MSG_ATTRIBUTE("Use initWithAdUnitID:.");
+
+/// Deprecated setter, use initWithAdUnitID: instead.
+- (void)setAdUnitID:(NSString *)adUnitID
+    DEPRECATED_MSG_ATTRIBUTE("Use initWithAdUnitID: instead of setting the ad unit ID.");
 
 @end

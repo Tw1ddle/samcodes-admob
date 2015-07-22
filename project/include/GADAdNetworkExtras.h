@@ -7,8 +7,6 @@
 
 #import <Foundation/Foundation.h>
 
-#import "GADModules.h"
-
 /// An object implementing this protocol contains information set by the publisher on the client
 /// device for a particular ad network.
 ///

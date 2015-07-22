@@ -7,28 +7,30 @@
 
 #import <UIKit/UIKit.h>
 
-#import "GADAdSize.h"
-#import "GADBannerViewDelegate.h"
-#import "GADInAppPurchaseDelegate.h"
-#import "GADModules.h"
-#import "GADRequest.h"
-#import "GADRequestError.h"
+#import <GoogleMobileAds/GADAdSize.h>
+#import <GoogleMobileAds/GADBannerViewDelegate.h>
+#import <GoogleMobileAds/GADInAppPurchaseDelegate.h>
+#import <GoogleMobileAds/GADRequest.h>
+#import <GoogleMobileAds/GADRequestError.h>
 
-/// The view that displays banner ads. A minimum implementation to get an ad
-/// from within a UIViewController class is:
+#ifndef IBInspectable
+#define IBInspectable
+#endif
+
+/// The view that displays banner ads. A minimum implementation to get an ad from within a
+/// UIViewController class is:
 ///
 ///   \code
 ///   // Create and setup the ad view, specifying the size and origin at {0, 0}.
 ///   GADBannerView *adView = [[GADBannerView alloc] initWithAdSize:kGADAdSizeBanner];
 ///   adView.rootViewController = self;
-///   adView.adUnitID = @"ID created when registering my app";
+///   adView.adUnitID = @"ID created when registering your app";
 ///
 ///   // Place the ad view onto the screen.
 ///   [self.view addSubview:adView];
-///   [adView release];
 ///
 ///   // Request an ad without any additional targeting information.
-///   [adView loadRequest:nil];
+///   [adView loadRequest:[GADRequest request]];
 ///   \endcode
 ///
 @interface GADBannerView : UIView
@@ -45,20 +47,17 @@
 
 #pragma mark Pre-Request
 
-/// Required value created in the AdSense website. Create a new ad unit for every unique placement
-/// of an ad in your application. Set this to the ID assigned for this placement. Ad units are
-/// important for targeting and stats.
-/// Example values for different request types:
+/// Required value created on the AdMob website. Create a new ad unit for every unique placement of
+/// an ad in your application. Set this to the ID assigned for this placement. Ad units are
+/// important for targeting and statistics.
 ///
-///     AdMob: a0123456789ABCD
-///       DFP: /0123/ca-pub-0123456789012345/my-ad-identifier
-///   AdSense: ca-mb-app-pub-0123456789012345/my-ad-identifier
-/// Mediation: AB123456789ABCDE
-@property(nonatomic, copy) NSString *adUnitID;
+/// Example AdMob ad unit ID: @"ca-app-pub-0123456789012345/0123456789"
+@property(nonatomic, copy) IBInspectable NSString *adUnitID;
 
 /// Required reference to the current root view controller. For example the root view controller in
-/// tab-based application would be the UITabViewController.
-@property(nonatomic, weak) UIViewController *rootViewController;
+/// tab-based application would be the UITabViewController. Remember to nil or update this property
+/// before deallocating the view controller.
+@property(nonatomic, weak) IBOutlet UIViewController *rootViewController;
 
 /// Required to set this banner view to a proper size. Never create your own GADAdSize directly. Use
 /// one of the predefined standard ad sizes (such as kGADAdSizeBanner), or create one using the
@@ -68,48 +67,23 @@
 @property(nonatomic, assign) GADAdSize adSize;
 
 /// Optional delegate object that receives state change notifications from this GADBannerView.
-/// Typically this is a UIViewController, however, if you are unfamiliar with the delegate pattern
-/// it is recommended you subclass this GADBannerView and make it the delegate. That avoids any
-/// chance of your application crashing if you forget to nil out the delegate. For example:
-///
-///   \code
-///   @interface MyAdView : GADBannerView <GADBannerViewDelegate>
-///   @end
-///
-///   @implementation MyAdView
-///   - (id)initWithFrame:(CGRect)frame {
-///     self = [super initWithFrame:frame];
-///     if (self) {
-///       self.delegate = self;
-///     }
-///     return self;
-///   }
-///
-///   - (void)dealloc {
-///     self.delegate = nil;
-///     [super dealloc];
-///   }
-///
-///   @end
-///   \endcode
-@property(nonatomic, weak) id<GADBannerViewDelegate> delegate;
+/// Typically this is a UIViewController. Remember to nil this property before deallocating the
+/// delegate.
+@property(nonatomic, weak) IBOutlet id<GADBannerViewDelegate> delegate;
 
 /// Optional delegate object that receives in-app purchase notifications from this ad. Required for
 /// the custom in-app purchase flow, but ignored when using the default in-app purchase flow.
-/// Remember to nil the delegate before deallocating this object.
-@property(nonatomic, weak) id<GADInAppPurchaseDelegate> inAppPurchaseDelegate;
+/// Remember to nil this property before deallocating the delegate.
+@property(nonatomic, weak) IBOutlet id<GADInAppPurchaseDelegate> inAppPurchaseDelegate;
 
 #pragma mark Making an Ad Request
 
-/// Makes an ad request. Additional targeting options can be supplied with a request object. Refresh
-/// the ad by calling this method again.
+/// Makes an ad request. The request object supplies targeting information.
 - (void)loadRequest:(GADRequest *)request;
 
-#pragma mark Ad Request
-
-/// Indicates if the currently displayed ad (or most recent failure) was a result of auto refreshing
-/// as specified on server. This property is set to NO after each loadRequest: method.
-@property(nonatomic, readonly, assign) BOOL hasAutoRefreshed;
+/// A Boolean value that determines whether autoloading of ads in the receiver is enabled. If
+/// enabled, you do not need to call the loadRequest: method to load ads.
+@property(nonatomic, assign, getter=isAutoloadEnabled) IBInspectable BOOL autoloadEnabled;
 
 #pragma mark Mediation
 
@@ -119,8 +93,15 @@
 /// events, this method returns @"GADMAdapterCustomEvents".
 @property(nonatomic, readonly, weak) NSString *adNetworkClassName;
 
-/// The underlying ad view of the mediated ad network. You may use this to find out the actual
-/// size of the ad and adjust GADBannerView to fit the underlying ad view.
+#pragma mark Deprecated
+
+/// Indicates if the currently displayed ad (or most recent failure) was a result of auto refreshing
+/// as specified on server. This property is set to NO after each loadRequest: method.
+@property(nonatomic, readonly, assign) BOOL hasAutoRefreshed __attribute__((deprecated));
+
+/// The mediated ad network's underlying ad view. You may use this property to read the ad's actual
+/// size and adjust this banner view's frame origin. However, modifying the banner view's frame size
+/// triggers the Mobile Ads SDK to request a new ad. Only update the banner view's frame origin.
 @property(nonatomic, readonly, weak) UIView *mediatedAdView
     __attribute__((deprecated("Use adNetworkClassName.")));
 

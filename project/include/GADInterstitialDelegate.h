@@ -7,8 +7,6 @@
 
 #import <Foundation/Foundation.h>
 
-#import "GADModules.h"
-
 @class GADInterstitial;
 @class GADRequestError;
 
