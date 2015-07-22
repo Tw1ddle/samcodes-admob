@@ -9,11 +9,10 @@ Supports:
 * Refreshing, showing and hiding banner ads.
 * Multiple ad units.
 * Customizable listener for reacting to SDK events.
-* Banners either at top or bottom of screen.
+* Customizable banner positioning.
 
 Doesn't support:
 * Displaying more than one banner at a time.
-* Complex customization for banner sizes or positions.
 * IAP functionality.
 * DoubleClick ads or mediation.
 

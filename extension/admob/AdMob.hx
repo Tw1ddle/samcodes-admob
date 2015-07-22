@@ -10,7 +10,11 @@ import flash.Lib;
 
 #if (android || ios)
 
-@:allow(extension.AdMob) class AdMob
+import extension.admob.AdMobGravity.AdMobHorizontalGravity;
+import extension.admob.AdMobGravity.AdMobVerticalGravity;
+
+@:allow(extension.AdMob)
+class AdMob
 {
 	// Must be called before use of any other methods in this class
 	public static function init(?testDeviceIdHash:String):Void {
@@ -43,8 +47,8 @@ import flash.Lib;
 		return has_cached_interstitial(id);
 	}
 	
-	public static function setBannerPosition(position:Int):Void {
-		set_banner_position(position);
+	public static function setBannerPosition(horizontal:AdMobHorizontalGravity, vertical:AdMobVerticalGravity):Void {
+		set_banner_position(horizontal, vertical);
 	}
 	
 	public static function refreshBanner(id:String):Void {
@@ -107,10 +111,10 @@ import flash.Lib;
 		}
 		if (set_banner_position == null) {
 			#if android
-			set_banner_position = JNI.createStaticMethod(packageName, "setBannerPosition", "(I)V");
+			set_banner_position = JNI.createStaticMethod(packageName, "setBannerPosition", "(II)V");
 			#end
 			#if ios
-			set_banner_position = Lib.load(ndllName, "set_banner_position", 1);
+			set_banner_position = Lib.load(ndllName, "set_banner_position", 2);
 			#end
 		}
 		if (refresh_banner == null) {

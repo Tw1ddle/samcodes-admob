@@ -23,7 +23,8 @@ extern "C" void sendAdMobEvent(const char* type, const char* location);
 static NSMutableDictionary* bannerDictionary;
 static NSMutableDictionary* interstitialDictionary;
 static NSMutableArray* testDevices;
-static int bannerPosition;
+static int bannerHorizontalAlignment;
+static int bannerVerticalAlignment;
 
 + (AdMobImplementation*)sharedInstance {
    static AdMobImplementation* sharedInstance = nil;
@@ -76,15 +77,30 @@ static int bannerPosition;
 	CGRect frame = banner.frame;
 	int autoresizingMask = 0;
 	
-	if(bannerPosition == 0) {
+	// Using Android's gravity constants: http://developer.android.com/reference/android/view/Gravity.html
+	if(bannerHorizontalAlignment == 3) { // Left
+		frame.origin.x = banner.rootViewController.view.bounds.x;
+		autoresizingMask += UIViewAutoresizingFlexibleLeftMargin | UIViewAutoresizingFlexibleRightMargin;
+	} else if(bannerHorizontalAlignment == 1) { // Center
+		frame.origin.x = banner.rootViewController.view.bounds.x + banner.rootViewController.view.bounds.size.width / 2 - frame.size.width / 2;
+		autoresizingMask += UIViewAutoresizingFlexibleLeftMargin | UIViewAutoresizingFlexibleRightMargin;
+ 	} else if(bannerHorizontalAlignment == 5) { // Right
+		frame.origin.x = banner.rootViewController.view.bounds.x + banner.rootViewController.view.bounds.size.width - frame.size.width;
+		autoresizingMask += UIViewAutoresizingFlexibleLeftMargin | UIViewAutoresizingFlexibleRightMargin;
+	}
+	
+	if(bannerVerticalAlignment == 80) { // Bottom
 		frame.origin.y = banner.rootViewController.view.bounds.size.height - frame.size.height;
-		autoresizingMask += UIViewAutoresizingFlexibleLeftMargin | UIViewAutoresizingFlexibleRightMargin;
 		autoresizingMask += UIViewAutoresizingFlexibleTopMargin;
-	} else if(bannerPosition == 1) {
+	} else if(bannerVerticalAlignment == 16) { // Center
+		frame.origin.y = banner.rootViewController.view.bounds.size.height / 2 - frame.size.height / 2;
+		autoresizingMask += UIViewAutoresizingFlexibleTopMargin | UIViewAutoresizingFlexibleBottomMargin;
+	} else if(bannerVerticalAlignment == 48) { // Top
 		frame.origin.y = 0;
-		autoresizingMask += UIViewAutoresizingFlexibleLeftMargin | UIViewAutoresizingFlexibleRightMargin;
 		autoresizingMask += UIViewAutoresizingFlexibleBottomMargin;
 	}
+	
+	if(
 	
 	banner.frame = frame;
 	banner.autoresizingMask = autoresizingMask;
@@ -167,7 +183,6 @@ namespace samcodesadmob
 		if([interstitial isReady]) {
 			[interstitial presentFromRootViewController:[[[UIApplication sharedApplication] keyWindow] rootViewController]];
 		} else {
-			// TODO could add timer that repeatedly request ad caching here, but it is better to make users cache their ads first...
 			NSLog(@"Not showing ad - make sure it has been cached first");
 		}
     }
@@ -183,9 +198,10 @@ namespace samcodesadmob
 		[interstitial loadRequest:request];
     }
 	
-	void setBannerPosition(int position)
+	void setBannerPosition(int horizontal, int vertical)
 	{
-		bannerPosition = position;
+		bannerHorizontalAlignment = horizontal;
+		bannerVerticalAlignment = vertical;
 	}
 	
     bool hasCachedInterstitial(const char* location)

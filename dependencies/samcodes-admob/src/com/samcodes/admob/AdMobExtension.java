@@ -96,16 +96,11 @@ public class AdMobExtension extends Extension
 		super.onDestroy();
 	}
 	
-	public static void setBannerPosition(final int position) {
+	public static void setBannerPosition(final int horizontal, final int vertical) {
 		mainActivity.runOnUiThread(new Runnable() {
 			public void run() {
-				if(position == 0) {
-					Log.d(TAG, "Setting banner position to bottom center");
-					AdMobExtension.getLayout().setGravity(Gravity.BOTTOM | Gravity.CENTER_HORIZONTAL);
-				} else if(position == 1) {
-					Log.d(TAG, "Setting banner position to top center");
-					AdMobExtension.getLayout().setGravity(Gravity.TOP | Gravity.CENTER_HORIZONTAL);
-				}
+				Log.d(TAG, "Setting banner position");
+				AdMobExtension.getLayout().setGravity(horizontal | vertical);
 			}
 		});
 	}

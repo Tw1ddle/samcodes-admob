@@ -49,9 +49,9 @@ static value has_cached_interstitial(value location)
 }
 DEFINE_PRIM(has_cached_interstitial, 1);
 
-static value set_banner_position(value position)
+static value set_banner_position(value horizontal, value vertical)
 {
-	setBannerPosition(val_int(position));
+	setBannerPosition(val_int(horizontal), val_int(vertical));
 	return alloc_null();
 }
 DEFINE_PRIM(set_banner_position, 1);
