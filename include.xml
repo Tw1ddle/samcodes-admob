@@ -13,6 +13,7 @@
         <dependency name="StoreKit.framework" />
         <dependency name="CoreTelephony.framework" />
         <dependency name="AVFoundation.framework" />
+		<dependency name="CoreMedia.framework" />
 	</section>
 	
 	<section if="android">

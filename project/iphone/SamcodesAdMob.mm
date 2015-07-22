@@ -34,7 +34,7 @@ static int bannerVerticalAlignment;
 	  bannerDictionary = [[NSMutableDictionary alloc] init];
 	  interstitialDictionary = [[NSMutableDictionary alloc] init];
 	  testDevices = [[NSMutableArray alloc] init];
-	  [testDevices addObject:GAD_SIMULATOR_ID];
+	  [testDevices addObject:kGADSimulatorID];
    });
 
    return sharedInstance;
@@ -48,9 +48,8 @@ static int bannerVerticalAlignment;
 	} else {
 		interstitial.delegate = nil;
 		
-		GADInterstitial* new_interstitial = [[GADInterstitial alloc] init];
+		GADInterstitial* new_interstitial = [[GADInterstitial alloc] initWithAdUnitID:location];
 		new_interstitial.delegate = self;
-		new_interstitial.adUnitID = location;
 		[interstitialDictionary setObject:new_interstitial forKey:location];
 		
 		return new_interstitial;
