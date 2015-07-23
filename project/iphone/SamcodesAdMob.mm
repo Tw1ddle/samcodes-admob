@@ -5,8 +5,8 @@
 
 #include "SamcodesAdMob.h"
 
-#import "GADInterstitial.h"
-#import "GADBannerView.h"
+#import "GoogleMobileAds/GADInterstitial.h"
+#import "GoogleMobileAds/GADBannerView.h"
 
 extern "C" void sendAdMobEvent(const char* type, const char* location);
 
@@ -78,13 +78,13 @@ static int bannerVerticalAlignment;
 	
 	// Using Android's gravity constants: http://developer.android.com/reference/android/view/Gravity.html
 	if(bannerHorizontalAlignment == 3) { // Left
-		frame.origin.x = banner.rootViewController.view.bounds.x;
+		frame.origin.x = banner.rootViewController.view.bounds.origin.x;
 		autoresizingMask += UIViewAutoresizingFlexibleLeftMargin | UIViewAutoresizingFlexibleRightMargin;
 	} else if(bannerHorizontalAlignment == 1) { // Center
-		frame.origin.x = banner.rootViewController.view.bounds.x + banner.rootViewController.view.bounds.size.width / 2 - frame.size.width / 2;
+		frame.origin.x = banner.rootViewController.view.bounds.origin.x + banner.rootViewController.view.bounds.size.width / 2 - frame.size.width / 2;
 		autoresizingMask += UIViewAutoresizingFlexibleLeftMargin | UIViewAutoresizingFlexibleRightMargin;
  	} else if(bannerHorizontalAlignment == 5) { // Right
-		frame.origin.x = banner.rootViewController.view.bounds.x + banner.rootViewController.view.bounds.size.width - frame.size.width;
+		frame.origin.x = banner.rootViewController.view.bounds.origin.x + banner.rootViewController.view.bounds.size.width - frame.size.width;
 		autoresizingMask += UIViewAutoresizingFlexibleLeftMargin | UIViewAutoresizingFlexibleRightMargin;
 	}
 	
@@ -98,8 +98,6 @@ static int bannerVerticalAlignment;
 		frame.origin.y = 0;
 		autoresizingMask += UIViewAutoresizingFlexibleBottomMargin;
 	}
-	
-	if(
 	
 	banner.frame = frame;
 	banner.autoresizingMask = autoresizingMask;
