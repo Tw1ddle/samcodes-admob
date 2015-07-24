@@ -5,7 +5,7 @@
 	"tags": ["admob","ads","interstitials","android","ios"],
 	"description": "Google AdMob banners and interstitials for Android and iOS",
 	"version": "1.0.1",
-	"releasenote": "Initial release",
+	"releasenote": "Better banner positioning, update to latest iOS SDK",
 	"contributors": ["samcodes"],
 	"dependencies": {"openfl-gps-lib": ""}
 }
