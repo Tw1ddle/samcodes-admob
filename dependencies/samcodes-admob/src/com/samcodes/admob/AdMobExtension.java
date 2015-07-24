@@ -51,16 +51,17 @@ public class AdMobExtension extends Extension
 	}
 	
 	public static void callHaxe(final String name, final Object[] args) {
-		if(callback != null) {
-			callbackHandler.post(new Runnable() {
-				public void run() {
-					Log.d(TAG, "Calling " + name + " from Java");
-					callback.call(name, args);
-				}
-			});
-		} else {
+		if(callback == null) {
 			Log.w(TAG, "AdMob callback object is null, ignoring AdMob callback");
+			return;
 		}
+		
+		callbackHandler.post(new Runnable() {
+			public void run() {
+				Log.d(TAG, "Calling " + name + " from Java");
+				callback.call(name, args);
+			}
+		});
 	}
 	
 	@Override
@@ -70,7 +71,6 @@ public class AdMobExtension extends Extension
 				v.resume();
 			}
 		}
-		
 		super.onResume();
 	}
 	
@@ -81,7 +81,6 @@ public class AdMobExtension extends Extension
 				v.pause();
 			}
 		}
-		
 		super.onPause();
 	}
 	
@@ -92,7 +91,6 @@ public class AdMobExtension extends Extension
 				v.destroy();
 			}
 		}
-		
 		super.onDestroy();
 	}
 	
@@ -108,66 +106,66 @@ public class AdMobExtension extends Extension
 	public static void refreshBanner(final String id) {
 		final AdView view = getBannerViewForUnitId(id);
 		
-		if(view != null) {
-			mainActivity.runOnUiThread(new Runnable() {
-				public void run() {
-					AdRequest request = null;
-					
-					if(testDeviceId != "null") {
-						request = new AdRequest.Builder()
-						.addTestDevice(AdRequest.DEVICE_ID_EMULATOR)
-						.addTestDevice(testDeviceId)
-						.build();
-					} else {
-						request = new AdRequest.Builder()
-						.addTestDevice(AdRequest.DEVICE_ID_EMULATOR)
-						.build();
-					}
-					
-					if(view.getAdListener() == null) {
-						view.setAdListener(new BannerListener(id));
-					} else if(view.getAdListener().getClass().equals(BannerListener.class) == false) {
-						view.setAdListener(new BannerListener(id));
-					}
-					
-					Log.d(TAG, "Preparing to show banner with id " + id);
-					
-					view.loadAd(request);
-				}
-			});
+		if(view == null) {
+			return;
 		}
+		
+		mainActivity.runOnUiThread(new Runnable() {
+			public void run() {
+				AdRequest request = null;
+				
+				if(testDeviceId != "null") {
+					request = new AdRequest.Builder().addTestDevice(AdRequest.DEVICE_ID_EMULATOR).addTestDevice(testDeviceId).build();
+				} else {
+					request = new AdRequest.Builder().addTestDevice(AdRequest.DEVICE_ID_EMULATOR).build();
+				}
+				
+				if(view.getAdListener() == null) {
+					view.setAdListener(new BannerListener(id));
+				} else if(view.getAdListener().getClass().equals(BannerListener.class) == false) {
+					view.setAdListener(new BannerListener(id));
+				}
+				
+				Log.d(TAG, "Preparing to show banner with id " + id);
+				view.loadAd(request);
+			}
+		});
 	}
 	
 	public static void showBanner(final String id) {		
 		final AdView view = getBannerViewForUnitId(id);
 		
-		if(view != null) {
-			mainActivity.runOnUiThread(new Runnable() {
-				public void run() {
-					Log.d(TAG, "Showing banner with id " + id);
-					AdView view = AdMobExtension.getBannerViewForUnitId(id);
-					view.setVisibility(View.VISIBLE);
-					AdMobExtension.getLayout().removeAllViews();
-					AdMobExtension.getLayout().addView(view);
-					AdMobExtension.getLayout().bringToFront();
-				}
-			});
+		if(view == null) {
+			return;
 		}
+		
+		mainActivity.runOnUiThread(new Runnable() {
+			public void run() {
+				Log.d(TAG, "Showing banner with id " + id);
+				AdView view = AdMobExtension.getBannerViewForUnitId(id);
+				view.setVisibility(View.VISIBLE);
+				AdMobExtension.getLayout().removeAllViews();
+				AdMobExtension.getLayout().addView(view);
+				AdMobExtension.getLayout().bringToFront();
+			}
+		});
 	}
 	
 	public static void hideBanner(final String id) {
 		final AdView view = getBannerViewForUnitId(id);
 		
-		if(view != null) {
-			mainActivity.runOnUiThread(new Runnable() {
-				public void run() {
-					Log.d(TAG, "Hiding banner with id " + id);
-					view.setVisibility(View.INVISIBLE);
-					getLayout().removeAllViews();
-					getLayout().bringToFront();
-				}
-			});
+		if(view == null) {
+			return;
 		}
+		
+		mainActivity.runOnUiThread(new Runnable() {
+			public void run() {
+				Log.d(TAG, "Hiding banner with id " + id);
+				view.setVisibility(View.INVISIBLE);
+				getLayout().removeAllViews();
+				getLayout().bringToFront();
+			}
+		});
 	}
 	
 	public static boolean hasCachedInterstitial(String id) {
@@ -177,8 +175,8 @@ public class AdMobExtension extends Extension
 			return false;
 		}
 		
-		// For some reason AdMob checking if an ad is loaded has to happen on the UI thread
-		// Since this is probably a fast operation I wait for the result
+		// AdMob checking if an ad is loaded has to happen on the UI thread
+		// Since this is probably a fast operation wait for the result
 		final Semaphore mutex = new Semaphore(0);
 		final AtomicBoolean isLoaded = new AtomicBoolean();
 		
@@ -207,14 +205,9 @@ public class AdMobExtension extends Extension
 					AdRequest request = null;
 					
 					if(testDeviceId != "null") {
-						request = new AdRequest.Builder()
-						.addTestDevice(AdRequest.DEVICE_ID_EMULATOR)
-						.addTestDevice(testDeviceId)
-						.build();
+						request = new AdRequest.Builder().addTestDevice(AdRequest.DEVICE_ID_EMULATOR).addTestDevice(testDeviceId).build();
 					} else {
-						request = new AdRequest.Builder()
-						.addTestDevice(AdRequest.DEVICE_ID_EMULATOR)
-						.build();
+						request = new AdRequest.Builder().addTestDevice(AdRequest.DEVICE_ID_EMULATOR).build();
 					}
 					
 					if(ad.getAdListener() == null) {
@@ -233,60 +226,29 @@ public class AdMobExtension extends Extension
 	public static void showInterstitial(final String id) {
 		final InterstitialAd ad = getInterstitialForUnitId(id);
 		
-		if(ad != null) {
-			if(hasCachedInterstitial(id)) {
-				mainActivity.runOnUiThread(new Runnable() {
-					public void run() {
-						Log.d(TAG, "Preparing to show interstitial");
-						
-						if(ad.getAdListener() == null) {
-							ad.setAdListener(new InterstitialListener(id));
-						} else if(ad.getAdListener().getClass().equals(InterstitialListener.class) == false) {
-							ad.setAdListener(new InterstitialListener(id));
-						}
-						
-						Log.d(TAG, "Showing interstitial with ad unit id " + ad.getAdUnitId());
-						ad.show();
-					}
-				});
-			} else {
-				Log.d(TAG, "Not showing interstitial because it hasn't cached yet");
-			}
-			
-			// Disabling this because it's better to discourage this type of use. Manage caching manually and use your own listener to show ads when they are ready.
-			/*
-			else {
-				Log.w(TAG, "Attempted to show interstitial that had not been cached. Sending a cache request now. Will show interstitial immediately once it has cached (timeout = 1 minute)");
-				Log.w(TAG, "If this interstitial gets cached from this or a future cache request, it will shown immediately. This will be annoying for your users. Avoid this by guarding with hasCachedInterstitial from Haxe.");
-				cacheInterstitial(id);
-				
-				final Timer timer = new Timer();
-				timer.schedule(new TimerTask() {
-					@Override
-					public void run() {
-						if(hasCachedInterstitial(id)) {
-							timer.cancel();
-							
-							mainActivity.runOnUiThread(new Runnable() {
-								public void run() {
-									Log.d(TAG, "Preparing to show interstitial");
-									
-									if(ad.getAdListener() == null) {
-										ad.setAdListener(new InterstitialListener(id));
-									} else if(ad.getAdListener().getClass().equals(InterstitialListener.class) == false) {
-										ad.setAdListener(new InterstitialListener(id));
-									}
-									
-									Log.d(TAG, "Showing interstitial with ad unit id " + ad.getAdUnitId());
-									ad.show();
-								}
-							});
-						}
-					}
-				}, 30, 2000);
-			}
-			*/
+		if(ad == null) {
+			return;
 		}
+		
+		if(!hasCachedInterstitial(id)) {
+			Log.d(TAG, "Not showing interstitial because it hasn't cached yet");
+			return;
+		}
+			
+		mainActivity.runOnUiThread(new Runnable() {
+			public void run() {
+				Log.d(TAG, "Preparing to show interstitial");
+				
+				if(ad.getAdListener() == null) {
+					ad.setAdListener(new InterstitialListener(id));
+				} else if(ad.getAdListener().getClass().equals(InterstitialListener.class) == false) {
+					ad.setAdListener(new InterstitialListener(id));
+				}
+				
+				Log.d(TAG, "Showing interstitial with ad unit id " + ad.getAdUnitId());
+				ad.show();
+			}
+		});
 	}
 	
 	private static InterstitialAd addInterstitialForUnitId(final String id) {		
@@ -340,26 +302,5 @@ public class AdMobExtension extends Extension
 		}
 		
 		return ad;
-	}
-	
-	/** Gets a string error reason from an error code. */
-	public static String getErrorReason(int errorCode) {
-		String errorReason = "";
-		switch(errorCode) {
-			case AdRequest.ERROR_CODE_INTERNAL_ERROR:
-				errorReason = "Internal error";
-				break;
-			case AdRequest.ERROR_CODE_INVALID_REQUEST:
-				errorReason = "Invalid request";
-				break;
-			case AdRequest.ERROR_CODE_NETWORK_ERROR:
-				errorReason = "Network Error";
-				break;
-			case AdRequest.ERROR_CODE_NO_FILL:
-				errorReason = "No fill";
-				break;
-			}
-			
-		return errorReason;
 	}
 }
