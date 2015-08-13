@@ -44,11 +44,16 @@ AdMob.init("YOUR_HASHED_TEST_DEVICE_ID");
 
 ```haxe
 // Basic usage
+
+import extension.admob.AdMob;
+import extension.admob.AdMobListener;
+import extension.admob.AdMobGravity;
+
 AdMob.init(); // Must be called first. You may specify a test device id for iOS here.
 
-// Attach your extended AdMobListener to handle/respond to SDK events 
-// Extending and customizing this can be used to perform actions like pausing the game/show ads as soon as they load etc.
-AdMob.setListener(new AdMobListener(listener));
+// Optionally subclass AdMobListener and set it here to handle SDK events .
+// Extending and customizing this can be used to perform actions like pausing the game/showing banners as soon as they load etc.
+AdMob.setListener(new AdMobListener());
 
 var interstitialId:String = "my_interstitial_id";
 
@@ -83,7 +88,7 @@ For a full example that uses a listener see the demo app: https://github.com/Tw1
 	
 ### Notes ###
 
-Note that you should add ```#if (android || ios)``` conditionals around your imports and calls to this library, especially for cross platform projects, as there is no stub implementation for other platforms included.
+Note that you should add platform conditionals like ```#if (android || ios)``` around your imports and calls to this library when creating a cross platform project, as there is no included stub/fallback implementation for other platforms.
 
 For running on iOS, you may need to drag your ```libAdMobAds.a``` into the "link binaries with libraries" section under the "build phases" tab in Xcode.
 

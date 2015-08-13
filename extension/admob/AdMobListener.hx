@@ -2,6 +2,9 @@ package extension.admob;
 
 class AdMobListener
 {
+	public function new() {
+	}
+
 	private function log(message:String):Void {
 		#if debug
 		trace(message);
