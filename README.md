@@ -69,13 +69,13 @@ var bannerId:String = "my_banner_id";
 AdMob.refreshBanner(bannerId);
 
 // A bit later...
-AdMob.showBanner(bannerId); // Shows the banner (it will only show immediately if you already cached a banner using refreshBanner)
+AdMob.showBanner(bannerId); // Shows the banner (it will only show if you have already cached a banner using refreshBanner)
 AdMob.hideBanner(bannerId); // Hides the banner
 ```
 
 ### Example ###
 
-For a full example see the demo app: https://github.com/Tw1ddle/samcodes-ads-demo
+For a full example that uses a listener see the demo app: https://github.com/Tw1ddle/samcodes-ads-demo
 
 ![Screenshot of demo app](https://github.com/Tw1ddle/samcodes-ads-demo/blob/master/screenshots/admob-banner.png?raw=true "Demo app")
 
@@ -83,9 +83,11 @@ For a full example see the demo app: https://github.com/Tw1ddle/samcodes-ads-dem
 	
 ### Notes ###
 
-For running on iOS, you first need to drag your ```libAdMobAds.a``` into the "link binaries with libraries" section under the "build phases" tab in Xcode.
+Note that you should add ```#if (android || ios)``` conditionals around your imports and calls to this library, especially for cross platform projects, as there is no stub implementation for other platforms included.
 
-If you need to rebuild the iOS libs for any reason navigate to ```/project``` and run:
+For running on iOS, you may need to drag your ```libAdMobAds.a``` into the "link binaries with libraries" section under the "build phases" tab in Xcode.
+
+If you need to rebuild the iOS libs navigate to the ```/project``` folder and run:
 
 ```bash
 haxelib run hxcpp Build.xml -Diphoneos
