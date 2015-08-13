@@ -4,8 +4,8 @@
 	"license": "MIT",
 	"tags": ["admob","ads","interstitials","android","ios"],
 	"description": "Google AdMob banners and interstitials for Android and iOS",
-	"version": "1.0.1",
-	"releasenote": "Better banner positioning, update to latest iOS SDK",
+	"version": "1.0.2",
+	"releasenote": "Updated docs, add constructor to listener base class",
 	"contributors": ["samcodes"],
 	"dependencies": {"openfl-gps-lib": ""}
 }
