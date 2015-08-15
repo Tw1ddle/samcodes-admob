@@ -37,7 +37,7 @@ class InterstitialListener extends AdListener {
 	/** Called when an ad failed to load. */
 	@Override
 	public void onAdFailedToLoad(int error) {
-		Log.d(TAG, "onInterstitialFailedToLoad: " + AdMobExtension.getErrorReason(error));
+		Log.d(TAG, "onInterstitialFailedToLoad");
 		
 		AdMobExtension.callHaxe("onInterstitialFailedToLoad", new Object[] {id});
 	}

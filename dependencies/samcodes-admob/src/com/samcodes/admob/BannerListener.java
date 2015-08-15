@@ -37,7 +37,7 @@ class BannerListener extends AdListener {
 	/** Called when an ad failed to load. */
 	@Override
 	public void onAdFailedToLoad(int error) {
-		Log.d(TAG, "onBannerFailedToLoad: " + AdMobExtension.getErrorReason(error));
+		Log.d(TAG, "onBannerFailedToLoad");
 		
 		Log.d(TAG, "Hiding banner with id " + id);
 		AdView view = AdMobExtension.getBannerViewForUnitId(id);

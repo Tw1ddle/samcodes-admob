@@ -1,5 +1,8 @@
 # CHANGELOG
 
+## 1.0.2 -> 1.0.3
+* Fix build error introduced in previous update.
+
 ## 1.0.1 -> 1.0.2
 * Add constructor to AdMobListener base class
 
