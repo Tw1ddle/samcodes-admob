@@ -1,7 +1,12 @@
 package extension.admob;
 
 #if android
+#if lime
+import lime.system.JNI;
+#end
+#if openfl
 import openfl.utils.JNI;
+#end
 #end
 
 #if ios
