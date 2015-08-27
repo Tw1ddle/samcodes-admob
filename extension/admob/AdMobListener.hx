@@ -1,7 +1,6 @@
 package extension.admob;
 
-class AdMobListener
-{
+class AdMobListener {
 	public function new() {
 	}
 

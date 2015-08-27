@@ -1,6 +1,6 @@
 # samcodes-admob
 
-Unofficial AdMob banner and interstitial ads support for iOS and Android Haxe/OpenFL targets.
+Unofficial AdMob banner and interstitial ads support for iOS and Android Haxe OpenFL/Lime targets.
 
 ### Features ###
 
