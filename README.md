@@ -7,9 +7,9 @@ Unofficial AdMob banner and interstitial ads support for iOS and Android Haxe Op
 Supports:
 * Caching and showing interstitial ads.
 * Refreshing, showing and hiding banner ads.
-* Multiple ad units.
 * Customizable listener for reacting to SDK events.
 * Customizable banner positioning.
+* Multiple ad units.
 
 Doesn't support:
 * Displaying more than one banner at a time.
@@ -23,6 +23,14 @@ If there is something you would like adding let me know. Pull requests welcomed 
 ```bash
 haxelib install samcodes-admob
 ```
+
+### Example ###
+
+See the demo app for a complete example using a custom listener: https://github.com/Tw1ddle/samcodes-ads-demo
+
+![Screenshot of demo app](https://github.com/Tw1ddle/samcodes-ads-demo/blob/master/screenshots/admob-banner.png?raw=true "Demo app")
+
+![Screenshot of demo app](https://github.com/Tw1ddle/samcodes-ads-demo/blob/master/screenshots/admob-interstitial.png?raw=true "Demo app")
 
 ### Usage ###
 
@@ -43,8 +51,6 @@ AdMob.init("YOUR_HASHED_TEST_DEVICE_ID");
 ```
 
 ```haxe
-// Basic usage
-
 import extension.admob.AdMob;
 import extension.admob.AdMobListener;
 import extension.admob.AdMobGravity;
@@ -77,14 +83,6 @@ AdMob.refreshBanner(bannerId);
 AdMob.showBanner(bannerId); // Shows the banner (it will only show if you have already cached a banner using refreshBanner)
 AdMob.hideBanner(bannerId); // Hides the banner
 ```
-
-### Example ###
-
-For a full example that uses a listener see the demo app: https://github.com/Tw1ddle/samcodes-ads-demo
-
-![Screenshot of demo app](https://github.com/Tw1ddle/samcodes-ads-demo/blob/master/screenshots/admob-banner.png?raw=true "Demo app")
-
-![Screenshot of demo app](https://github.com/Tw1ddle/samcodes-ads-demo/blob/master/screenshots/admob-interstitial.png?raw=true "Demo app")
 	
 ### Notes ###
 
