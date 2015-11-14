@@ -45,7 +45,7 @@ For Android enter a device id if you want to use test ads on one:
 <setenv name="AdmobTestDeviceId" value="YOUR_HASHED_TEST_DEVICE_ID" />
 ```
 
-For iOS you may specify a test device id in the AdMob.init() call in Haxe code:
+For iOS you can specify a test device id in the AdMob.init() call in Haxe code:
 ```haxe
 AdMob.init("YOUR_HASHED_TEST_DEVICE_ID");
 ```
@@ -57,19 +57,19 @@ import extension.admob.AdMobGravity;
 
 AdMob.init(); // Must be called first. You may specify a test device id for iOS here.
 
-// Optionally subclass AdMobListener and set it here to handle SDK events .
-// Extending and customizing this can be used to perform actions like pausing the game/showing banners as soon as they load etc.
+// Optionally subclass AdMobListener and set it here to handle SDK events.
+// Extending and customizing this is useful for actions like pausing the game when showing interstitials, showing banners as soon as they cache etc.
 AdMob.setListener(new AdMobListener());
 
 var interstitialId:String = "my_interstitial_id";
 
-AdMob.cacheInterstitial(interstitialId); // Cache interstitial with the given id from your AdMob dashboard.
+AdMob.cacheInterstitial(interstitialId); // Cache interstitial with the id from your AdMob dashboard.
 
-// A bit later...
+// Later...
 if(AdMob.hasCachedInterstitial(interstitialId) {
 	// Shows an interstitial with the given id.
-	// If this is called and the ad isn't cached, then it won't display at all (that's just how the AdMob SDK works).
-	// Generally you should cache interstitial ads well in advance of showing them.
+	// If this is called and the interstitial isn't cached, then it won't display at all - that's just how the AdMob SDK works.
+	// You should cache interstitial ads well in advance of showing them.
 	AdMob.showInterstitial(interstitialId);
 }
 
@@ -79,21 +79,21 @@ var bannerId:String = "my_banner_id";
 
 AdMob.refreshBanner(bannerId);
 
-// A bit later...
+// Later...
 AdMob.showBanner(bannerId); // Shows the banner (it will only show if you have already cached a banner using refreshBanner)
 AdMob.hideBanner(bannerId); // Hides the banner
 ```
 	
 ### Notes ###
 
-Note that you should add platform conditionals like ```#if (android || ios)``` around your imports and calls to this library when creating a cross platform project, as there is no included stub/fallback implementation for other platforms.
+Add ```#if (android || ios)``` conditionals around your imports and calls to this library when creating a cross platform project, as there is no included stub/fallback implementation in this haxelib.
 
-For running on iOS, you may need to drag your ```libAdMobAds.a``` into the "link binaries with libraries" section under the "build phases" tab in Xcode.
-
-If you need to rebuild the iOS libs navigate to the ```/project``` folder and run:
+For iOS you need to drag your ```libAdMobAds.a``` into the "link binaries with libraries" section under the "build phases" tab in Xcode. If you need to rebuild the iOS or simulator ndlls navigate to ```/project``` and run:
 
 ```bash
 haxelib run hxcpp Build.xml -Diphoneos
 haxelib run hxcpp Build.xml -Diphoneos -DHXCPP_ARMV7
 haxelib run hxcpp Build.xml -Diphoneos -DHXCPP_ARM64
+haxelib run hxcpp Build.xml -Diphonesim -DHXCPP_M64
+haxelib run hxcpp Build.xml -Diphonesim
 ```
