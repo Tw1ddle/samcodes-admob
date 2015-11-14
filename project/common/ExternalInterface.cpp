@@ -54,7 +54,7 @@ static value set_banner_position(value horizontal, value vertical)
 	setBannerPosition(val_int(horizontal), val_int(vertical));
 	return alloc_null();
 }
-DEFINE_PRIM(set_banner_position, 1);
+DEFINE_PRIM(set_banner_position, 2);
 
 static value refresh_banner(value location)
 {
