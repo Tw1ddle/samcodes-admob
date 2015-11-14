@@ -159,8 +159,6 @@ static int bannerVerticalAlignment;
 
 @end
 
-extern "C" void sendAdMobEvent(const char* type, const char* location);
-
 namespace samcodesadmob
 {
     void initAdMob(const char* testDeviceHash)
