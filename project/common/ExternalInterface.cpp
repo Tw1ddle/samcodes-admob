@@ -88,7 +88,6 @@ extern "C" int samcodesadmob_register_prims()
 	return 0; 
 }
 
-// TODO need to do this more cleanly
 extern "C" void sendAdMobEvent(const char* type, const char* location)
 {
     if(adMobEventHandle == 0)

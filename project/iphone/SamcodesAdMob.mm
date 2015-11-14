@@ -10,6 +10,15 @@
 
 extern "C" void sendAdMobEvent(const char* type, const char* location);
 
+void queueAdMobEvent(const char* type, const char* location)
+{
+    // NOTE queueing maybe isn't necessary?
+    //[[NSOperationQueue mainQueue] addOperationWithBlock:^ {
+        NSLog(@"%@ %@", [NSString stringWithUTF8String:type], [NSString stringWithUTF8String:location]);
+        sendAdMobEvent(type, location);
+    //}];
+}
+
 @interface AdMobImplementation : NSObject <GADInterstitialDelegate, GADBannerViewDelegate> {
 }
 
@@ -106,30 +115,30 @@ static int bannerVerticalAlignment;
 }
 
 - (void)interstitialDidReceiveAd:(GADInterstitial *)ad {
-	sendAdMobEvent("onInterstitialLoaded", [ad.adUnitID cStringUsingEncoding:[NSString defaultCStringEncoding]]);
+	queueAdMobEvent("onInterstitialLoaded", [ad.adUnitID cStringUsingEncoding:[NSString defaultCStringEncoding]]);
 }
 
 - (void)interstitial:(GADInterstitial *)ad didFailToReceiveAdWithError:(GADRequestError *)error {
-	sendAdMobEvent("onInterstitialFailedToLoad", [ad.adUnitID cStringUsingEncoding:[NSString defaultCStringEncoding]]);
+	queueAdMobEvent("onInterstitialFailedToLoad", [ad.adUnitID cStringUsingEncoding:[NSString defaultCStringEncoding]]);
 }
 
 - (void)interstitialWillPresentScreen:(GADInterstitial *)ad {
-	sendAdMobEvent("onInterstitialOpened", [ad.adUnitID cStringUsingEncoding:[NSString defaultCStringEncoding]]);
+	queueAdMobEvent("onInterstitialOpened", [ad.adUnitID cStringUsingEncoding:[NSString defaultCStringEncoding]]);
 }
 
 - (void)interstitialWillDismissScreen:(GADInterstitial *)ad {
-	sendAdMobEvent("onInterstitialClosed", [ad.adUnitID cStringUsingEncoding:[NSString defaultCStringEncoding]]);
+	queueAdMobEvent("onInterstitialClosed", [ad.adUnitID cStringUsingEncoding:[NSString defaultCStringEncoding]]);
 }
 
 - (void)interstitialDidDismissScreen:(GADInterstitial *)ad {
 }
 
 - (void)interstitialWillLeaveApplication:(GADInterstitial *)ad {
-	sendAdMobEvent("onInterstitialLeftApplication", [ad.adUnitID cStringUsingEncoding:[NSString defaultCStringEncoding]]);
+	queueAdMobEvent("onInterstitialLeftApplication", [ad.adUnitID cStringUsingEncoding:[NSString defaultCStringEncoding]]);
 }
 
 - (void)adViewDidReceiveAd:(GADBannerView *)adView {
-	sendAdMobEvent("onBannerLoaded", [adView.adUnitID cStringUsingEncoding:[NSString defaultCStringEncoding]]);
+	queueAdMobEvent("onBannerLoaded", [adView.adUnitID cStringUsingEncoding:[NSString defaultCStringEncoding]]);
 }
 
 - (void)adView:(GADBannerView *)adView didFailToReceiveAdWithError:(GADRequestError *)error {
@@ -139,22 +148,22 @@ static int bannerVerticalAlignment;
 	
 	adView.hidden = true;
 	
-	sendAdMobEvent("onBannerFailedToLoad", [adView.adUnitID cStringUsingEncoding:[NSString defaultCStringEncoding]]);
+	queueAdMobEvent("onBannerFailedToLoad", [adView.adUnitID cStringUsingEncoding:[NSString defaultCStringEncoding]]);
 }
 
 - (void)adViewWillPresentScreen:(GADBannerView *)adView {	
-	sendAdMobEvent("onBannerOpened", [adView.adUnitID cStringUsingEncoding:[NSString defaultCStringEncoding]]);
+	queueAdMobEvent("onBannerOpened", [adView.adUnitID cStringUsingEncoding:[NSString defaultCStringEncoding]]);
 }
 
 - (void)adViewWillDismissScreen:(GADBannerView *)adView {
-	sendAdMobEvent("onBannerClosed", [adView.adUnitID cStringUsingEncoding:[NSString defaultCStringEncoding]]);
+	queueAdMobEvent("onBannerClosed", [adView.adUnitID cStringUsingEncoding:[NSString defaultCStringEncoding]]);
 }
 
 - (void)adViewDidDismissScreen:(GADBannerView *)adView {
 }
 
 - (void)adViewWillLeaveApplication:(GADBannerView *)adView {
-	sendAdMobEvent("onBannerLeftApplication", [adView.adUnitID cStringUsingEncoding:[NSString defaultCStringEncoding]]);
+	queueAdMobEvent("onBannerLeftApplication", [adView.adUnitID cStringUsingEncoding:[NSString defaultCStringEncoding]]);
 }
 
 @end
@@ -172,6 +181,7 @@ namespace samcodesadmob
 	void showInterstitial(const char* location)
 	{
         NSString *nsLocation = [[NSString alloc] initWithUTF8String:location];
+        NSLog(@"showInterstitial %@", nsLocation);
 		AdMobImplementation *instance = [AdMobImplementation sharedInstance];
 		GADInterstitial* interstitial = [instance getInterstitialForAdUnit:nsLocation];
 		
@@ -183,8 +193,9 @@ namespace samcodesadmob
     }
 	
     void cacheInterstitial(const char* location)
-    {
+    {        
         NSString *nsLocation = [[NSString alloc] initWithUTF8String:location];
+        NSLog(@"cacheInterstitial %@", nsLocation);
 		AdMobImplementation *instance = [AdMobImplementation sharedInstance];
 		GADInterstitial* interstitial = [instance getInterstitialForAdUnit:nsLocation];
 		
@@ -202,6 +213,7 @@ namespace samcodesadmob
     bool hasCachedInterstitial(const char* location)
     {
         NSString *nsLocation = [[NSString alloc] initWithUTF8String:location];
+        NSLog(@"hasCachedInterstitial %@", nsLocation);
 		AdMobImplementation *instance = [AdMobImplementation sharedInstance];
 		GADInterstitial* interstitial = [instance getInterstitialForAdUnit:nsLocation];
 		
@@ -211,6 +223,7 @@ namespace samcodesadmob
 	void refreshBanner(const char* location)
 	{
 		NSString *nsLocation = [[NSString alloc] initWithUTF8String:location];
+        NSLog(@"refreshBanner %@", nsLocation);
 		AdMobImplementation *instance = [AdMobImplementation sharedInstance];
 		GADBannerView* banner = [instance getBannerForAdUnit:nsLocation];
 		
@@ -222,6 +235,7 @@ namespace samcodesadmob
     void showBanner(const char* location)
     {
         NSString *nsLocation = [[NSString alloc] initWithUTF8String:location];
+        NSLog(@"showBanner %@", nsLocation);
 		AdMobImplementation *instance = [AdMobImplementation sharedInstance];
 		GADBannerView* banner = [instance getBannerForAdUnit:nsLocation];
 		
@@ -235,6 +249,7 @@ namespace samcodesadmob
     void hideBanner(const char* location)
     {
         NSString *nsLocation = [[NSString alloc] initWithUTF8String:location];
+        NSLog(@"hideBanner %@", nsLocation);
 		AdMobImplementation *instance = [AdMobImplementation sharedInstance];
 		GADBannerView* banner = [instance getBannerForAdUnit:nsLocation];
 		
