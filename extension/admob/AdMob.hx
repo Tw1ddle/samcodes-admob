@@ -1,7 +1,15 @@
 package extension.admob;
 
 #if android
+
+#if lime
+import lime.system.JNI;
+#elseif openfl
 import openfl.utils.JNI;
+#else
+#error "samcodes-admob could not find JNI include for non-openfl and non-lime project."
+#end
+
 #end
 
 #if ios
@@ -14,8 +22,7 @@ import extension.admob.AdMobGravity.AdMobHorizontalGravity;
 import extension.admob.AdMobGravity.AdMobVerticalGravity;
 
 @:allow(extension.AdMob)
-class AdMob
-{
+class AdMob {
 	// Must be called before use of any other methods in this class
 	public static function init(?testDeviceIdHash:String):Void {
 		AdMob.initBindings();

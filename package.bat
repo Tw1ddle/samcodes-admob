@@ -1,1 +1,1 @@
-zip -0r samcodes-admob.zip dependencies extension ndll project haxelib.json include.xml README.md
+zip -0r samcodes-admob.zip dependencies extension ndll project haxelib.json include.xml README.md CHANGELOG.md LICENSE
