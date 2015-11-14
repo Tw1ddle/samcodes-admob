@@ -1,8 +1,8 @@
 # CHANGELOG
 
 ## 1.0.5 -> 1.0.6
-* Fix set_banner_position CFFI definition.
-* Updated to iOS AdMob SDK 7.5.2.
+* Updated to iOS AdMob SDK 7.5.2
+* Fix set_banner_position CFFI definition
 
 ## 1.0.4 -> 1.0.5
 * Update to non-deprecated Google Play services dependency library
