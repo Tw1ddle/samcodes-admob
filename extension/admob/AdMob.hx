@@ -2,10 +2,10 @@ package extension.admob;
 
 #if android
 
-#if lime
-import lime.system.JNI;
-#elseif openfl
+#if openfl
 import openfl.utils.JNI;
+#elseif lime
+import lime.system.JNI;
 #else
 #error "samcodes-admob could not find JNI include for non-openfl and non-lime project."
 #end
