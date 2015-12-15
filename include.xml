@@ -17,6 +17,7 @@
 	</section>
 	
 	<section if="android">
+		<haxelib name="extension-android-support-v4" />
 		<haxelib name="extension-googleplayservices-lib" /> 
 		<dependency name="samcodes-admob" path="dependencies/samcodes-admob"/>
 		<android extension="com.samcodes.admob.AdMobExtension" />

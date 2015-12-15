@@ -4,8 +4,11 @@
 	"license": "MIT",
 	"tags": ["admob","ads","interstitials","android","ios"],
 	"description": "Google AdMob banners and interstitials for Android and iOS",
-	"version": "1.0.6",
+	"version": "1.0.7",
 	"releasenote": "Updated to iOS AdMob SDK 7.5.2, some minor bug fixes.",
 	"contributors": ["samcodes"],
-	"dependencies": {"extension-googleplayservices-lib": ""}
+	"dependencies": {
+		"extension-android-support-v4": "",
+		"extension-googleplayservices-lib": ""
+	}
 }
