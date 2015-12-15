@@ -1,5 +1,9 @@
 # CHANGELOG
 
+## 1.0.6 -> 1.0.7
+* Fix runtime crash by including extension-android-support-v4.
+* Fix typo in AndroidManifest.xml, missed closing tag on the AdActivity activity.
+
 ## 1.0.5 -> 1.0.6
 * Updated to iOS AdMob SDK 7.5.2
 * Fix set_banner_position CFFI definition

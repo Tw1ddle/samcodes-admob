@@ -5,7 +5,7 @@
 	"tags": ["admob","ads","interstitials","android","ios"],
 	"description": "Google AdMob banners and interstitials for Android and iOS",
 	"version": "1.0.7",
-	"releasenote": "Updated to iOS AdMob SDK 7.5.2, some minor bug fixes.",
+	"releasenote": "Fix runtime crash by including android-support-v4.jar, fixed typo in AndroidManifest.xml activity.",
 	"contributors": ["samcodes"],
 	"dependencies": {
 		"extension-android-support-v4": "",
