@@ -1,5 +1,8 @@
 # CHANGELOG
 
+## 1.0.7 -> 1.0.8
+* Update to iOS Google Mobile Ads SDK 7.7.0.
+
 ## 1.0.6 -> 1.0.7
 * Fix runtime crash by including extension-android-support-v4.
 * Fix typo in AndroidManifest.xml, missed closing tag on the AdActivity activity.

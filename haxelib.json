@@ -4,8 +4,8 @@
 	"license": "MIT",
 	"tags": ["admob","ads","interstitials","android","ios"],
 	"description": "Google AdMob banners and interstitials for Android and iOS",
-	"version": "1.0.7",
-	"releasenote": "Fix runtime crash by including android-support-v4.jar, fixed typo in AndroidManifest.xml activity.",
+	"version": "1.0.8",
+	"releasenote": "Update to iOS Google Mobile Ads SDK 7.7.0",
 	"contributors": ["samcodes"],
 	"dependencies": {
 		"extension-android-support-v4": "",

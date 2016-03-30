@@ -1,18 +1,18 @@
 # samcodes-admob
 
-Unofficial AdMob banner and interstitial ads support for iOS and Android Haxe OpenFL/Lime targets.
+Unofficial [AdMob](https://developers.google.com/admob/) banner and interstitial ad support for iOS and Android Haxe OpenFL/Lime targets.
 
 ### Features ###
 
 Supports:
-* Caching and showing interstitial ads.
-* Refreshing, showing and hiding banner ads.
+* Caching, showing and dismissing interstitial ads.
+* Showing, hiding and refreshing banner ads.
 * Customizable listener for reacting to SDK events.
 * Customizable banner positioning.
 * Multiple ad units.
 
 Doesn't support:
-* Displaying more than one banner at a time.
+* Displaying more than one banner ad at a time.
 * IAP functionality.
 * DoubleClick ads or mediation.
 
@@ -26,7 +26,7 @@ haxelib install samcodes-admob
 
 ### Example ###
 
-See the demo app for a complete example using a custom listener: https://github.com/Tw1ddle/samcodes-ads-demo
+See the demo app for a working example using a custom listener: https://github.com/Tw1ddle/samcodes-ads-demo
 
 ![Screenshot of demo app](https://github.com/Tw1ddle/samcodes-ads-demo/blob/master/screenshots/admob-banner.png?raw=true "Demo app")
 
@@ -80,13 +80,13 @@ var bannerId:String = "my_banner_id";
 AdMob.refreshBanner(bannerId);
 
 // Later...
-AdMob.showBanner(bannerId); // Shows the banner (it will only show if you have already cached a banner using refreshBanner)
+AdMob.showBanner(bannerId); // Shows the banner (it will only show if the SDK has finished caching a banner after calling refreshBanner)
 AdMob.hideBanner(bannerId); // Hides the banner
 ```
 	
 ### Notes ###
 
-Add ```#if (android || ios)``` conditionals around your imports and calls to this library when creating a cross platform project, as there is no included stub/fallback implementation in this haxelib.
+Use ```#if (android || ios)``` conditionals around your imports and calls to this library for cross platform projects, as there is no stub/fallback implementation included in the haxelib.
 
 For iOS you need to drag your ```libAdMobAds.a``` into the "link binaries with libraries" section under the "build phases" tab in Xcode. If you need to rebuild the iOS or simulator ndlls navigate to ```/project``` and run:
 
