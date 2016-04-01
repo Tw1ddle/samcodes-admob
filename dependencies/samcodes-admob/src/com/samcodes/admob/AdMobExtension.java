@@ -168,7 +168,7 @@ public class AdMobExtension extends Extension
 		});
 	}
 	
-	public static boolean hasCachedInterstitial(String id) {
+	public static boolean hasInterstitial(String id) {
 		final InterstitialAd ad = getInterstitialForUnitId(id);
 		
 		if(ad == null) {
@@ -230,7 +230,7 @@ public class AdMobExtension extends Extension
 			return;
 		}
 		
-		if(!hasCachedInterstitial(id)) {
+		if(!hasInterstitial(id)) {
 			Log.d(TAG, "Not showing interstitial because it hasn't cached yet");
 			return;
 		}

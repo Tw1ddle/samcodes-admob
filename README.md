@@ -66,7 +66,7 @@ var interstitialId:String = "my_interstitial_id";
 AdMob.cacheInterstitial(interstitialId); // Cache interstitial with the id from your AdMob dashboard.
 
 // Later...
-if(AdMob.hasCachedInterstitial(interstitialId) {
+if(AdMob.hasInterstitial(interstitialId) {
 	// Shows an interstitial with the given id.
 	// If this is called and the interstitial isn't cached, then it won't display at all - that's just how the AdMob SDK works.
 	// You should cache interstitial ads well in advance of showing them.

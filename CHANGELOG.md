@@ -2,6 +2,7 @@
 
 ## 1.0.7 -> 1.0.8
 * Update to iOS Google Mobile Ads SDK 7.7.0.
+* Renamed hasCachedInterstitial method to hasInterstitial.
 
 ## 1.0.6 -> 1.0.7
 * Fix runtime crash by including extension-android-support-v4.
