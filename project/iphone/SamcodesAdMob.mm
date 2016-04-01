@@ -210,10 +210,10 @@ namespace samcodesadmob
 		bannerVerticalAlignment = vertical;
 	}
 	
-    bool hasCachedInterstitial(const char* location)
+    bool hasInterstitial(const char* location)
     {
         NSString *nsLocation = [[NSString alloc] initWithUTF8String:location];
-        NSLog(@"hasCachedInterstitial %@", nsLocation);
+        NSLog(@"hasInterstitial %@", nsLocation);
 		AdMobImplementation *instance = [AdMobImplementation sharedInstance];
 		GADInterstitial* interstitial = [instance getInterstitialForAdUnit:nsLocation];
 		

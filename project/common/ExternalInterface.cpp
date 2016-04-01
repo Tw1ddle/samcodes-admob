@@ -43,11 +43,11 @@ static value cache_interstitial(value location)
 }
 DEFINE_PRIM(cache_interstitial, 1);
 
-static value has_cached_interstitial(value location)
+static value has_interstitial(value location)
 {
-    return alloc_bool(hasCachedInterstitial(val_string(location)));
+    return alloc_bool(hasInterstitial(val_string(location)));
 }
-DEFINE_PRIM(has_cached_interstitial, 1);
+DEFINE_PRIM(has_interstitial, 1);
 
 static value set_banner_position(value horizontal, value vertical)
 {
