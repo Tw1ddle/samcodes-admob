@@ -88,12 +88,6 @@ AdMob.hideBanner(bannerId); // Hides the banner
 
 Use ```#if (android || ios)``` conditionals around your imports and calls to this library for cross platform projects, as there is no stub/fallback implementation included in the haxelib.
 
-For iOS you need to drag your ```libAdMobAds.a``` into the "link binaries with libraries" section under the "build phases" tab in Xcode. If you need to rebuild the iOS or simulator ndlls navigate to ```/project``` and run:
+For iOS you need to drag your ```libAdMobAds.a``` into the "link binaries with libraries" section under the "build phases" tab in Xcode.
 
-```bash
-haxelib run hxcpp Build.xml -Diphoneos
-haxelib run hxcpp Build.xml -Diphoneos -DHXCPP_ARMV7
-haxelib run hxcpp Build.xml -Diphoneos -DHXCPP_ARM64
-haxelib run hxcpp Build.xml -Diphonesim -DHXCPP_M64
-haxelib run hxcpp Build.xml -Diphonesim
-```
+If you need to rebuild the iOS or simulator ndlls navigate to ```/project``` and run ```rebuild_ndlls.sh```.
