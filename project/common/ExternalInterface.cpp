@@ -24,28 +24,28 @@ DEFINE_PRIM(samcodesadmob_set_listener, 1);
 
 static value samcodesadmob_init_admob(value hashed_device_id)
 {
-    initAdMob(val_string(hashed_device_id));
-    return alloc_null();
+	initAdMob(val_string(hashed_device_id));
+	return alloc_null();
 }
 DEFINE_PRIM(samcodesadmob_init_admob, 1);
 
 static value samcodesadmob_show_interstitial(value location)
 {
-    showInterstitial(val_string(location));
-    return alloc_null();
+	showInterstitial(val_string(location));
+	return alloc_null();
 }
 DEFINE_PRIM(samcodesadmob_show_interstitial, 1);
 
 static value samcodesadmob_cache_interstitial(value location)
 {
-    cacheInterstitial(val_string(location));
-    return alloc_null();
+	cacheInterstitial(val_string(location));
+	return alloc_null();
 }
 DEFINE_PRIM(samcodesadmob_cache_interstitial, 1);
 
 static value samcodesadmob_has_interstitial(value location)
 {
-    return alloc_bool(hasInterstitial(val_string(location)));
+	return alloc_bool(hasInterstitial(val_string(location)));
 }
 DEFINE_PRIM(samcodesadmob_has_interstitial, 1);
 
@@ -90,10 +90,10 @@ extern "C" int samcodesadmob_register_prims()
 
 extern "C" void sendAdMobEvent(const char* type, const char* location)
 {
-    if(adMobEventHandle == 0)
-    {
-        return;
-    }
+	if(adMobEventHandle == 0)
+	{
+		return;
+	}
 	value o = alloc_empty_object();
 	alloc_field(o, val_id("type"), alloc_string(type));
 	alloc_field(o, val_id("location"), alloc_string(location));
