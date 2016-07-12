@@ -1,5 +1,8 @@
 # CHANGELOG
 
+## 1.0.8 -> 1.0.9
+* Fixed a bug with non-unique CFFI primitive names, which could cause clashes (duplicate symbol errors) when using other haxelibs
+
 ## 1.0.7 -> 1.0.8
 * Update to iOS Google Mobile Ads SDK 7.7.0.
 * Renamed hasCachedInterstitial method to hasInterstitial.
