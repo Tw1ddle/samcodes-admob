@@ -69,7 +69,7 @@ class AdMob {
 		hide_banner(id);
 	}
 	
-	private static function initBindings():Void {		
+	private static function initBindings():Void {
 		#if ios
 		if (init_admob == null) {
 			init_admob = Lib.load(ndllName, "init_admob", 1);
@@ -86,18 +86,18 @@ class AdMob {
 		hide_banner = initBinding("hideBanner", "(Ljava/lang/String;)V", "hide_banner", 1);
 	}
 	
-	private static inline function initBinding(jniMethod:String, jniSignature:String, ndllMethod:String, argCount:Int):Dynamic {		
+	private static inline function initBinding(jniMethod:String, jniSignature:String, ndllMethod:String, argCount:Int):Dynamic {
 		#if android
 		var binding = JNI.createStaticMethod(packageName, jniMethod, jniSignature);
 		#end
 		
 		#if ios
-		var binding = Lib.load(ndllName, ndllMethod, argCount);
+		var binding = Lib.load(ndllName, ndllName + "_" + ndllMethod, argCount);
 		#end
 		
 		#if debug
 		if (binding == null) {
-			throw "Failed to bind method: " + jniMethod + ", " + jniSignature + ", " + ndllMethod + " (" + Std.string(argCount) + ").";
+			throw "Failed to bind method: " + jniMethod + ", " + jniSignature + ", " + ndllName + "_" + ndllMethod + " (" + Std.string(argCount) + ").";
 		}
 		#end
 		
