@@ -1,12 +1,13 @@
-#import <UIKit/UIKit.h>
-#import <CoreFoundation/CoreFoundation.h>
 #include <ctype.h>
 #include <objc/runtime.h>
 
+#import <CoreFoundation/CoreFoundation.h>
+#import <UIKit/UIKit.h>
+
 #include "SamcodesAdMob.h"
 
-#import "GoogleMobileAds/GADInterstitial.h"
 #import "GoogleMobileAds/GADBannerView.h"
+#import "GoogleMobileAds/GADInterstitial.h"
 
 extern "C" void sendAdMobEvent(const char* type, const char* location);
 
@@ -39,14 +40,14 @@ static int bannerVerticalAlignment;
    static AdMobImplementation* sharedInstance = nil;
    static dispatch_once_t onceToken;
    dispatch_once(&onceToken, ^{
-      sharedInstance = [[AdMobImplementation alloc] init];	  
-	  bannerDictionary = [[NSMutableDictionary alloc] init];
-	  interstitialDictionary = [[NSMutableDictionary alloc] init];
-	  testDevices = [[NSMutableArray alloc] init];
-	  [testDevices addObject:kGADSimulatorID];
+		sharedInstance = [[AdMobImplementation alloc] init];
+		bannerDictionary = [[NSMutableDictionary alloc] init];
+		interstitialDictionary = [[NSMutableDictionary alloc] init];
+		testDevices = [[NSMutableArray alloc] init];
+		[testDevices addObject:kGADSimulatorID];
    });
 
-   return sharedInstance;
+	return sharedInstance;
 }
 
 -(GADInterstitial*)getInterstitialForAdUnit:(NSString*)location {
@@ -151,7 +152,7 @@ static int bannerVerticalAlignment;
 	queueAdMobEvent("onBannerFailedToLoad", [adView.adUnitID cStringUsingEncoding:[NSString defaultCStringEncoding]]);
 }
 
-- (void)adViewWillPresentScreen:(GADBannerView *)adView {	
+- (void)adViewWillPresentScreen:(GADBannerView *)adView {
 	queueAdMobEvent("onBannerOpened", [adView.adUnitID cStringUsingEncoding:[NSString defaultCStringEncoding]]);
 }
 
@@ -170,18 +171,18 @@ static int bannerVerticalAlignment;
 
 namespace samcodesadmob
 {
-    void initAdMob(const char* testDeviceHash)
-    {
+	void initAdMob(const char* testDeviceHash)
+	{
 		if(testDeviceHash != nil) {
 			NSString *nsTestDeviceHash = [[NSString alloc] initWithUTF8String:testDeviceHash];
 			[testDevices addObject:nsTestDeviceHash];
 		}
-    }
+	}
 	
 	void showInterstitial(const char* location)
 	{
-        NSString *nsLocation = [[NSString alloc] initWithUTF8String:location];
-        NSLog(@"showInterstitial %@", nsLocation);
+		NSString *nsLocation = [[NSString alloc] initWithUTF8String:location];
+		NSLog(@"showInterstitial %@", nsLocation);
 		AdMobImplementation *instance = [AdMobImplementation sharedInstance];
 		GADInterstitial* interstitial = [instance getInterstitialForAdUnit:nsLocation];
 		
@@ -190,19 +191,19 @@ namespace samcodesadmob
 		} else {
 			NSLog(@"Not showing ad - make sure it has been cached first");
 		}
-    }
-	
-    void cacheInterstitial(const char* location)
-    {        
-        NSString *nsLocation = [[NSString alloc] initWithUTF8String:location];
-        NSLog(@"cacheInterstitial %@", nsLocation);
+	}
+
+	void cacheInterstitial(const char* location)
+	{
+		NSString *nsLocation = [[NSString alloc] initWithUTF8String:location];
+		NSLog(@"cacheInterstitial %@", nsLocation);
 		AdMobImplementation *instance = [AdMobImplementation sharedInstance];
 		GADInterstitial* interstitial = [instance getInterstitialForAdUnit:nsLocation];
 		
 		GADRequest *request = [GADRequest request];
 		request.testDevices = testDevices;
 		[interstitial loadRequest:request];
-    }
+	}
 	
 	void setBannerPosition(int horizontal, int vertical)
 	{
@@ -210,10 +211,10 @@ namespace samcodesadmob
 		bannerVerticalAlignment = vertical;
 	}
 	
-    bool hasInterstitial(const char* location)
-    {
-        NSString *nsLocation = [[NSString alloc] initWithUTF8String:location];
-        NSLog(@"hasInterstitial %@", nsLocation);
+	bool hasInterstitial(const char* location)
+	{
+		NSString *nsLocation = [[NSString alloc] initWithUTF8String:location];
+		NSLog(@"hasInterstitial %@", nsLocation);
 		AdMobImplementation *instance = [AdMobImplementation sharedInstance];
 		GADInterstitial* interstitial = [instance getInterstitialForAdUnit:nsLocation];
 		
@@ -223,7 +224,7 @@ namespace samcodesadmob
 	void refreshBanner(const char* location)
 	{
 		NSString *nsLocation = [[NSString alloc] initWithUTF8String:location];
-        NSLog(@"refreshBanner %@", nsLocation);
+		NSLog(@"refreshBanner %@", nsLocation);
 		AdMobImplementation *instance = [AdMobImplementation sharedInstance];
 		GADBannerView* banner = [instance getBannerForAdUnit:nsLocation];
 		
@@ -232,24 +233,24 @@ namespace samcodesadmob
 		[banner loadRequest:request];
 	}
 	
-    void showBanner(const char* location)
-    {
-        NSString *nsLocation = [[NSString alloc] initWithUTF8String:location];
-        NSLog(@"showBanner %@", nsLocation);
+	void showBanner(const char* location)
+	{
+		NSString *nsLocation = [[NSString alloc] initWithUTF8String:location];
+		NSLog(@"showBanner %@", nsLocation);
 		AdMobImplementation *instance = [AdMobImplementation sharedInstance];
 		GADBannerView* banner = [instance getBannerForAdUnit:nsLocation];
 		
 		if(!banner.superview) {
 			[banner.rootViewController.view addSubview:banner];
 		}
-        
+		
 		banner.hidden = false;
-    }
+	}
 	
-    void hideBanner(const char* location)
-    {
-        NSString *nsLocation = [[NSString alloc] initWithUTF8String:location];
-        NSLog(@"hideBanner %@", nsLocation);
+	void hideBanner(const char* location)
+	{
+		NSString *nsLocation = [[NSString alloc] initWithUTF8String:location];
+		NSLog(@"hideBanner %@", nsLocation);
 		AdMobImplementation *instance = [AdMobImplementation sharedInstance];
 		GADBannerView* banner = [instance getBannerForAdUnit:nsLocation];
 		
@@ -258,5 +259,5 @@ namespace samcodesadmob
 		}
 		
 		banner.hidden = true;
-    }
+	}
 }

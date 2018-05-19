@@ -4,11 +4,8 @@
 	"license": "MIT",
 	"tags": ["admob","ads","interstitials","android","ios"],
 	"description": "Google AdMob banners and interstitials for Android and iOS",
-	"version": "1.0.9",
-	"releasenote": "Fixed an issue with use of non-unique CFFI primitive names",
+	"version": "1.1.0",
+	"releasenote": "Updates for latest AdMob SDK support, GDPR compliance, OpenFL 8 support",
 	"contributors": ["samcodes"],
-	"dependencies": {
-		"extension-android-support-v4": "",
-		"extension-googleplayservices-lib": ""
-	}
+	"dependencies": { "google-play-services" : "" }
 }

@@ -1,8 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android" package="com.samcodes.admob" >
-
 	<application android:debuggable="::DEBUG::">
-		<activity 
+		<activity
 		::if (WIN_ORIENTATION=="portrait")::android:screenOrientation="portrait"::end::
 		::if (WIN_ORIENTATION=="landscape")::android:screenOrientation="landscape"::end::
 		android:name="com.google.android.gms.ads.AdActivity"
@@ -10,10 +9,7 @@
 		android:theme="@android:style/Theme.Translucent"
 		/>
 		
-		<meta-data
-		android:name="com.google.android.gms.version"
-		android:value="@integer/google_play_services_version"
-		/>
+		<meta-data android:name="com.google.android.gms.version" android:value="@integer/google_play_services_version" />
 	</application>
 	
 	<!-- Used to request ads. -->
@@ -22,5 +18,4 @@
 	<uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
 	<!-- Required permissions for video ads. -->
 	<uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
-	
 </manifest>

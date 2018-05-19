@@ -1,5 +1,11 @@
 # CHANGELOG
 
+## 1.0.9 -> 1.1.0
+ * Upgraded to latest AdMob SDK.
+ * Numerous updates to support OpenFL 8.
+ * Updated bindings to facilitate GDPR compliance.
+ * Made init method iOS-only and renamed to initAdMob.
+
 ## 1.0.8 -> 1.0.9
 * Fixed a bug with non-unique CFFI primitive names, which could cause clashes (duplicate symbol errors) when using other haxelibs
 

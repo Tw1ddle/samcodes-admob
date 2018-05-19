@@ -1,5 +1,8 @@
 package extension.admob;
 
+/**
+   Customizable listener for responding to AdMob SDK events.
+**/
 class AdMobListener {
 	public function new() {
 	}

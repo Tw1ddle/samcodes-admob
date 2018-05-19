@@ -3,22 +3,28 @@
 	<ndll name="samcodesadmob" if="ios" />
 
 	<section if="ios">
-		<dependency name="project/include/libGoogleAdMobAds.a" />
-		<dependency name="QuartzCore.framework"/>
-		<dependency name="SystemConfiguration.framework" />
+		<dependency path="project/include/Chartboost.framework" />
+		
 		<dependency name="AdSupport.framework" />
-		<dependency name="MessageUI.framework" />
-		<dependency name="EventKit.framework" />
-		<dependency name="EventKitUI.framework" />
-		<dependency name="StoreKit.framework" />
-		<dependency name="CoreTelephony.framework" />
 		<dependency name="AVFoundation.framework" />
 		<dependency name="CoreMedia.framework" />
+		<dependency name="CoreTelephony.framework" />
+		<dependency name="EventKit.framework" />
+		<dependency name="EventKitUI.framework" />
+		<dependency name="MessageUI.framework" />
+		<dependency name="QuartzCore.framework"/>
+		<dependency name="StoreKit.framework" />
+		<dependency name="SystemConfiguration.framework" />
 	</section>
 	
 	<section if="android">
-		<haxelib name="extension-android-support-v4" />
-		<haxelib name="extension-googleplayservices-lib" /> 
+		<!-- See: https://github.com/player-03/google-play-services -->
+		<set name="playServicesVersion" value="+" unless="playServicesVersion" />
+		
+		<set name="google-mobile-ads" />
+		
+		<haxelib name="google-play-services" />
+		
 		<dependency name="samcodes-admob" path="dependencies/samcodes-admob"/>
 		<android extension="com.samcodes.admob.AdMobExtension" />
 	</section>

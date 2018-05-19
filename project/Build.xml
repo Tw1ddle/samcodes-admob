@@ -9,10 +9,12 @@
 	<files id="iphone">
 		<compilerflag value="-IiPhone/include"/>
 		<compilerflag value="-Iinclude"/>
+		<compilerflag value="-Iinclude/GoogleMobileAds.framework/Versions/Headers" />
+		
 		<file name="iphone/SamcodesAdMob.mm"/>
 	</files>
 	
-	<target id="NDLL" output="${LIBPREFIX}samcodesadmob${debug_extra}${LIBEXTRA}" tool="linker" toolid="${STD_MODULE_LINK}">	
+	<target id="NDLL" output="${LIBPREFIX}samcodesadmob${debug_extra}${LIBEXTRA}" tool="linker" toolid="${STD_MODULE_LINK}">
 		<outdir name="../ndll/${BINDIR}"/>
 		<ext value=".ndll" if="windows || mac || linux"/>
 		<files id="common"/>

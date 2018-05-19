@@ -1,4 +1,7 @@
 #!/bin/bash
+
+set -eu
+
 haxelib run hxcpp Build.xml clean
 haxelib run hxcpp Build.xml -Diphoneos
 haxelib run hxcpp Build.xml -Diphoneos -DHXCPP_ARMV7

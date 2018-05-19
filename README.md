@@ -1,8 +1,11 @@
-# samcodes-admob
+# Haxe AdMob
 
-Unofficial [AdMob](https://developers.google.com/admob/) banner and interstitial ad support for iOS and Android Haxe OpenFL/Lime targets.
+[![Travis Build Status](https://img.shields.io/travis/Tw1ddle/samcodes-admob.svg?style=flat-square)](https://travis-ci.org/Tw1ddle/samcodes-admob)
+[![License](http://img.shields.io/:license-mit-blue.svg?style=flat-square)](https://github.com/Tw1ddle/samcodes-admob/blob/master/LICENSE)
 
-### Features ###
+Unofficial AdMob banner and interstitial ad support for iOS and Android Haxe OpenFL/Lime targets. See the demo app [here](https://github.com/Tw1ddle/samcodes-ads-demo).
+
+### Features
 
 Supports:
 * Caching, showing and dismissing interstitial ads.
@@ -18,13 +21,13 @@ Doesn't support:
 
 If there is something you would like adding let me know. Pull requests welcomed too!
 
-### Install ###
+### Install
 
 ```bash
 haxelib install samcodes-admob
 ```
 
-### Example ###
+### Example
 
 See the demo app for a working example using a custom listener: https://github.com/Tw1ddle/samcodes-ads-demo
 
@@ -32,7 +35,7 @@ See the demo app for a working example using a custom listener: https://github.c
 
 ![Screenshot of demo app](https://github.com/Tw1ddle/samcodes-ads-demo/blob/master/screenshots/admob-interstitial.png?raw=true "Demo app")
 
-### Usage ###
+### Usage
 
 Include the haxelib through Project.xml:
 ```xml
@@ -73,7 +76,7 @@ if(AdMob.hasInterstitial(interstitialId) {
 	AdMob.showInterstitial(interstitialId);
 }
 
-AdMob.setBannerPosition(AdMobHorizontalGravity.CENTER, AdMobVerticalGravity.BOTTOM); // All banners will appear bottom center of the screen 
+AdMob.setBannerPosition(AdMobHorizontalGravity.CENTER, AdMobVerticalGravity.BOTTOM); // All banners will appear bottom center of the screen
 
 var bannerId:String = "my_banner_id";
 
@@ -83,11 +86,9 @@ AdMob.refreshBanner(bannerId);
 AdMob.showBanner(bannerId); // Shows the banner (it will only show if the SDK has finished caching a banner after calling refreshBanner)
 AdMob.hideBanner(bannerId); // Hides the banner
 ```
-	
-### Notes ###
+
+### Notes
 
 Use ```#if (android || ios)``` conditionals around your imports and calls to this library for cross platform projects, as there is no stub/fallback implementation included in the haxelib.
-
-For iOS you need to drag your ```libAdMobAds.a``` into the "link binaries with libraries" section under the "build phases" tab in Xcode.
 
 If you need to rebuild the iOS or simulator ndlls navigate to ```/project``` and run ```rebuild_ndlls.sh```.

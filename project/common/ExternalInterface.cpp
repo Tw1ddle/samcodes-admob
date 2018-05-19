@@ -7,6 +7,8 @@
 #endif
 
 #include <hx/CFFI.h>
+#include <hx/CFFIPrime.h>
+
 #include "SamcodesAdMob.h"
 
 using namespace samcodesadmob;
@@ -15,67 +17,63 @@ using namespace samcodesadmob;
 
 AutoGCRoot* adMobEventHandle = 0;
 
-static value samcodesadmob_set_listener(value onEvent)
+void samcodesadmob_init_admob(HxString hashedDeviceId)
 {
-	adMobEventHandle = new AutoGCRoot(onEvent);
-	return alloc_null();
+	initAdMob(hashedDeviceId.c_str());
 }
-DEFINE_PRIM(samcodesadmob_set_listener, 1);
+DEFINE_PRIME1v(samcodesadmob_init_admob);
 
-static value samcodesadmob_init_admob(value hashed_device_id)
+void samcodesadmob_set_listener(value onEvent)
 {
-	initAdMob(val_string(hashed_device_id));
-	return alloc_null();
+	if(adMobEventHandle == 0) {
+		adMobEventHandle = new AutoGCRoot(onEvent);
+	} else {
+		adMobEventHandle->set(onEvent);
+	}
 }
-DEFINE_PRIM(samcodesadmob_init_admob, 1);
+DEFINE_PRIME1v(samcodesadmob_set_listener);
 
-static value samcodesadmob_show_interstitial(value location)
+void samcodesadmob_show_interstitial(HxString location)
 {
-	showInterstitial(val_string(location));
-	return alloc_null();
+	showInterstitial(location.c_str());
 }
-DEFINE_PRIM(samcodesadmob_show_interstitial, 1);
+DEFINE_PRIME1v(samcodesadmob_show_interstitial);
 
-static value samcodesadmob_cache_interstitial(value location)
+void samcodesadmob_cache_interstitial(HxString location)
 {
-	cacheInterstitial(val_string(location));
-	return alloc_null();
+	cacheInterstitial(location.c_str());
 }
-DEFINE_PRIM(samcodesadmob_cache_interstitial, 1);
+DEFINE_PRIME1v(samcodesadmob_cache_interstitial);
 
-static value samcodesadmob_has_interstitial(value location)
+bool samcodesadmob_has_interstitial(HxString location)
 {
-	return alloc_bool(hasInterstitial(val_string(location)));
+	return hasInterstitial(location.c_str());
 }
-DEFINE_PRIM(samcodesadmob_has_interstitial, 1);
+DEFINE_PRIME1(samcodesadmob_has_interstitial);
 
-static value samcodesadmob_set_banner_position(value horizontal, value vertical)
+void samcodesadmob_set_banner_position(int horizontal, int vertical)
 {
-	setBannerPosition(val_int(horizontal), val_int(vertical));
-	return alloc_null();
+	setBannerPosition(horizontal, vertical);
 }
-DEFINE_PRIM(samcodesadmob_set_banner_position, 2);
+DEFINE_PRIME2v(samcodesadmob_set_banner_position);
 
-static value samcodesadmob_refresh_banner(value location)
+void samcodesadmob_refresh_banner(HxString location)
 {
-	refreshBanner(val_string(location));
-	return alloc_null();
+	refreshBanner(location.c_str());
 }
-DEFINE_PRIM(samcodesadmob_refresh_banner, 1);
+DEFINE_PRIME1v(samcodesadmob_refresh_banner);
 
-static value samcodesadmob_show_banner(value location)
+void samcodesadmob_show_banner(HxString location)
 {
-	showBanner(val_string(location));
-	return alloc_null();
+	showBanner(location.c_str());
 }
-DEFINE_PRIM(samcodesadmob_show_banner, 1);
+DEFINE_PRIME1v(samcodesadmob_show_banner);
 
-static value samcodesadmob_hide_banner(value location)
+void samcodesadmob_hide_banner(HxString location)
 {
-	hideBanner(val_string(location));
-	return alloc_null();
+	hideBanner(location.c_str());
 }
-DEFINE_PRIM(samcodesadmob_hide_banner, 1);
+DEFINE_PRIME1v(samcodesadmob_hide_banner);
 
 extern "C" void samcodesadmob_main()
 {
