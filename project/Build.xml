@@ -7,8 +7,8 @@
 	</files>
 	
 	<files id="iphone">
-		<compilerflag value="-IiPhone/include"/>
 		<compilerflag value="-Iinclude"/>
+		<compilerflag value="-Iinclude/GoogleMobileAds"/>
 		
 		<file name="iphone/SamcodesAdMob.mm"/>
 	</files>
