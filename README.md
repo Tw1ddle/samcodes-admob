@@ -3,7 +3,7 @@
 [![Travis Build Status](https://img.shields.io/travis/Tw1ddle/samcodes-admob.svg?style=flat-square)](https://travis-ci.org/Tw1ddle/samcodes-admob)
 [![License](http://img.shields.io/:license-mit-blue.svg?style=flat-square)](https://github.com/Tw1ddle/samcodes-admob/blob/master/LICENSE)
 
-Unofficial AdMob banner and interstitial ad support for iOS and Android Haxe OpenFL/Lime targets. See the demo app [here](https://github.com/Tw1ddle/samcodes-ads-demo).
+Unofficial AdMob banner and interstitial ad support for iOS and Android Haxe OpenFL targets. See the demo app [here](https://github.com/Tw1ddle/samcodes-ads-demo).
 
 ### Features
 
@@ -30,7 +30,7 @@ haxelib install samcodes-admob
 
 ### Example
 
-See the demo app for a working example using a custom listener: https://github.com/Tw1ddle/samcodes-ads-demo
+See the [demo app](https://github.com/Tw1ddle/samcodes-ads-demo) for a working example using a custom listener:
 
 ![Screenshot of demo app](https://github.com/Tw1ddle/samcodes-ads-demo/blob/master/screenshots/admob-banner.png?raw=true "Demo app")
 
@@ -49,9 +49,9 @@ For Android enter a device id if you want to use test ads on one:
 <setenv name="AdmobTestDeviceId" value="YOUR_HASHED_TEST_DEVICE_ID" />
 ```
 
-For iOS you can specify a test device id in the AdMob.init() call in Haxe code:
+For iOS you can specify a test device id in the AdMob.initAdMob() call in Haxe code:
 ```haxe
-AdMob.init("YOUR_HASHED_TEST_DEVICE_ID");
+AdMob.initAdMob("YOUR_HASHED_TEST_DEVICE_ID");
 ```
 
 ```haxe
@@ -59,7 +59,9 @@ import extension.admob.AdMob;
 import extension.admob.AdMobListener;
 import extension.admob.AdMobGravity;
 
-AdMob.init(); // Must be called first. You may specify a test device id for iOS here.
+#if ios
+AdMob.initAdMob("YOUR_HASHED_TEST_DEVICE_ID"); // Specify a test device id for iOS here.
+#end
 
 // Optionally subclass AdMobListener and set it here to handle SDK events.
 // Extending and customizing this is useful for actions like pausing the game when showing interstitials, showing banners as soon as they cache etc.
