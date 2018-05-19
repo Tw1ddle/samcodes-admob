@@ -15,7 +15,6 @@
 		<dependency name="EventKit.framework" />
 		<dependency name="EventKitUI.framework" />
 		<dependency name="GLKit.framework" />
-		<dependency name="LaunchServices.framework" />
 		<dependency name="MediaPlayer.framework" />
 		<dependency name="MessageUI.framework" />
 		<dependency name="MobileCoreServices.framework" />
