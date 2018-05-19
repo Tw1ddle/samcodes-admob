@@ -17,6 +17,7 @@ Supports:
 Doesn't support:
 * Displaying more than one banner ad at a time.
 * IAP functionality.
+* Rewarded videos.
 * DoubleClick ads or mediation.
 
 If there is something you would like adding let me know. Pull requests welcomed too!

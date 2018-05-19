@@ -5,7 +5,7 @@
 	"tags": ["admob","ads","interstitials","android","ios"],
 	"description": "Google AdMob banners and interstitials for Android and iOS",
 	"version": "1.1.0",
-	"releasenote": "Updates for latest AdMob SDK support, GDPR compliance, OpenFL 8 support",
+	"releasenote": "Update to latest AdMob SDK version, OpenFL 8 support",
 	"contributors": ["samcodes"],
 	"dependencies": { "google-play-services" : "" }
 }
