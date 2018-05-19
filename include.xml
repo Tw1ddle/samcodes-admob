@@ -8,21 +8,26 @@
 		<dependency name="AdSupport.framework" />
 		<dependency name="AudioToolbox.framework" />
 		<dependency name="AVFoundation.framework" />
+		<dependency name="CFNetwork.framework" />
 		<dependency name="CoreGraphics.framework" />
 		<dependency name="CoreMedia.framework" />
-		<dependency name="CoreServices.framework" />
+		<dependency name="CoreMotion.framework" />
 		<dependency name="CoreTelephony.framework" />
 		<dependency name="CoreVideo.framework" />
-		<dependency name="EventKit.framework" />
-		<dependency name="EventKitUI.framework" />
+		<dependency name="Foundation.framework" />
 		<dependency name="GLKit.framework" />
+		<dependency name="JavaScriptCore.framework" />
 		<dependency name="MediaPlayer.framework" />
 		<dependency name="MessageUI.framework" />
 		<dependency name="MobileCoreServices.framework" />
+		<dependency name="OpenGLES.framework" />
 		<dependency name="QuartzCore.framework"/>
+		<dependency name="SafariServices.framework" />
 		<dependency name="Security.framework" />
 		<dependency name="StoreKit.framework" />
 		<dependency name="SystemConfiguration.framework" />
+		<dependency name="UIKit.framework" />
+		<dependency name="WebKit.framework" />
 	</section>
 	
 	<section if="android">

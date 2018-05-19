@@ -9,7 +9,6 @@
 	<files id="iphone">
 		<compilerflag value="-IiPhone/include"/>
 		<compilerflag value="-Iinclude"/>
-		<compilerflag value="-Iinclude/GoogleMobileAds.framework/Headers" />
 		
 		<file name="iphone/SamcodesAdMob.mm"/>
 	</files>
