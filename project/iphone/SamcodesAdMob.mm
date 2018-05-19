@@ -6,8 +6,8 @@
 
 #include "SamcodesAdMob.h"
 
-#import "GoogleMobileAds/GADBannerView.h"
-#import "GoogleMobileAds/GADInterstitial.h"
+#import "GADBannerView.h"
+#import "GADInterstitial.h"
 
 extern "C" void sendAdMobEvent(const char* type, const char* location);
 

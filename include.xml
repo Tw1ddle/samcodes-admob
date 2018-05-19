@@ -3,7 +3,7 @@
 	<ndll name="samcodesadmob" if="ios" />
 
 	<section if="ios">
-		<dependency path="project/include/Chartboost.framework" />
+		<dependency path="project/include/GoogleMobileAds.framework" />
 		
 		<dependency name="AdSupport.framework" />
 		<dependency name="AVFoundation.framework" />
