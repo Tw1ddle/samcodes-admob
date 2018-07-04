@@ -114,7 +114,7 @@ public class AdMobExtension extends Extension
 			public void run() {
 				AdRequest request = null;
 				
-				if(testDeviceId != "null") {
+				if(!testDeviceId.equals("null")) {
 					request = new AdRequest.Builder().addTestDevice(AdRequest.DEVICE_ID_EMULATOR).addTestDevice(testDeviceId).build();
 				} else {
 					request = new AdRequest.Builder().addTestDevice(AdRequest.DEVICE_ID_EMULATOR).build();
@@ -204,7 +204,7 @@ public class AdMobExtension extends Extension
 				public void run() {
 					AdRequest request = null;
 					
-					if(testDeviceId != "null") {
+					if(!testDeviceId.equals("null")) {
 						request = new AdRequest.Builder().addTestDevice(AdRequest.DEVICE_ID_EMULATOR).addTestDevice(testDeviceId).build();
 					} else {
 						request = new AdRequest.Builder().addTestDevice(AdRequest.DEVICE_ID_EMULATOR).build();
@@ -251,7 +251,7 @@ public class AdMobExtension extends Extension
 		});
 	}
 	
-	private static InterstitialAd addInterstitialForUnitId(final String id) {		
+	private static InterstitialAd addInterstitialForUnitId(final String id) {
 		final InterstitialAd ad = new InterstitialAd(mainActivity);
 		
 		if(ad.getAdUnitId() == null) {
@@ -274,7 +274,6 @@ public class AdMobExtension extends Extension
 			ad.setAdUnitId(id);
 		}
 		
-		// TODO could look up options set from Haxe here
 		ad.setAdSize(AdSize.SMART_BANNER);
 		
 		unitIdToBannerView.put(id, ad);
