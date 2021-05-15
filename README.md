@@ -4,7 +4,7 @@
 
 Unofficial AdMob banner and interstitial ad support for iOS and Android Haxe OpenFL targets.
 
-This is deprecated, I am no longer updating it because I do not use AdMob in any projects. Feel free to fork and fix this though!
+*This is deprecated* - I am no longer updating it because I do not currently use AdMob for any projects. Feel free to fork this and bring it up to date though!
 
 ### Features
 
