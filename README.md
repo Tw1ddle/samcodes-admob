@@ -1,6 +1,5 @@
 # Haxe AdMob
 
-[![Travis Build 
 [![License](http://img.shields.io/:license-mit-blue.svg?style=flat-square)](https://github.com/Tw1ddle/samcodes-admob/blob/master/LICENSE)
 
 Unofficial AdMob banner and interstitial ad support for iOS and Android Haxe OpenFL targets.
