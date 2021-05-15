@@ -1,9 +1,11 @@
 # Haxe AdMob
 
-[![Travis Build Status](https://img.shields.io/travis/Tw1ddle/samcodes-admob.svg?style=flat-square)](https://travis-ci.org/Tw1ddle/samcodes-admob)
+[![Travis Build 
 [![License](http://img.shields.io/:license-mit-blue.svg?style=flat-square)](https://github.com/Tw1ddle/samcodes-admob/blob/master/LICENSE)
 
-Unofficial AdMob banner and interstitial ad support for iOS and Android Haxe OpenFL targets. See the demo app [here](https://github.com/Tw1ddle/samcodes-ads-demo).
+Unofficial AdMob banner and interstitial ad support for iOS and Android Haxe OpenFL targets.
+
+This is deprecated, I am no longer updating it because I do not use AdMob in any projects. Feel free to fork and fix this though!
 
 ### Features
 
@@ -20,21 +22,11 @@ Doesn't support:
 * Rewarded videos.
 * DoubleClick ads or mediation.
 
-If there is something you would like adding let me know. Pull requests welcomed too!
-
 ### Install
 
 ```bash
 haxelib install samcodes-admob
 ```
-
-### Example
-
-See the [demo app](https://github.com/Tw1ddle/samcodes-ads-demo) for a working example using a custom listener:
-
-![Screenshot of demo app](https://github.com/Tw1ddle/samcodes-ads-demo/blob/master/screenshots/admob-banner.png?raw=true "Demo app")
-
-![Screenshot of demo app](https://github.com/Tw1ddle/samcodes-ads-demo/blob/master/screenshots/admob-interstitial.png?raw=true "Demo app")
 
 ### Usage
 
